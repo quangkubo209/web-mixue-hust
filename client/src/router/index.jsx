@@ -1,8 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import route from "../constants/route";
 import Home from "../components//Home";
-import CrudProduct from "../components/CrudProduct";
-import VerticalMenuBar from "../components/MenuBar";
+import DefaultLayout from "../components/DefaultLayout";
+import Dashboard from "../pages/Dashboard";
+import ProductManagement from "../pages/product/ProductManagement";
 
 const router = createBrowserRouter([
   {
@@ -10,13 +11,20 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: route.CRUDPRODUCT,
-    element: <CrudProduct />,
-  },
-  {
-    path: route.VERTICALMENUBAR,
-    element: <VerticalMenuBar />,
-  }
+    path: route.ADMINPAGE,
+    element: <DefaultLayout />,
+    children:[
+      {
+        path: route.DASHBOARD,
+        element: <Dashboard/>
+      },
+      {
+        path: route.PRODUCTMANAGEMENT,
+        element: <ProductManagement />,
+      },
+    ]
+  }, 
+
 ]);
 
 export default router;

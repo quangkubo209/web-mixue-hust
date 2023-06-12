@@ -5,14 +5,15 @@ import route from "../constants/route";
 import { useState } from "react";
 // import authApi from "../../api/authApi";
 import { userStateContext } from "../contexts/StateProvider";
-import {Dialog} from "primereact/dialog";
+import { Dialog } from "primereact/dialog";
 
-export default function Signin({visible, setVisible}) {
+export default function Signin({ visible, setVisible }) {
   const navigate = useNavigate();
   const { setCurrentUser } = userStateContext();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
   const handleSignin = () => {
     const submit = async () => {
       try {
@@ -22,16 +23,16 @@ export default function Signin({visible, setVisible}) {
         };
         const response = await authApi.signin(data);
 
-        if (response.data.type === "SUCCESS") {
-          setCurrentUser(response.data.user);
-          localStorage.setItem("userId", response.data.user._id);
-          localStorage.setItem(
-            "REFRESH_TOKEN",
-            response.data.tokens.refreshToken
-          );
-          localStorage.setItem("TOKEN", response.data.tokens.accessToken);
-          return navigate(route.HOME);
-        }
+        // if (response.data.type === "SUCCESS") {
+        //   setCurrentUser(response.data.user);
+        //   localStorage.setItem("userId", response.data.user._id);
+        //   localStorage.setItem(
+        //     "REFRESH_TOKEN",
+        //     response.data.tokens.refreshToken
+        //   );
+        //   localStorage.setItem("TOKEN", response.data.tokens.accessToken);
+        //   return navigate(route.HOME);
+        // }
       } catch (err) {
         console.log(err);
       }
@@ -41,54 +42,56 @@ export default function Signin({visible, setVisible}) {
   };
 
   return (
-    <Dialog 
-    visible={visible}
-    style={{width :  "30%" }}
-    onHide={() => {
+    <Dialog
+      visible={visible}
+      style={{ width: "30%" }}
+      onHide={() => {
         setVisible(false);
-    }}
-    header="Sign in"
-    className=" h-1/2 "
+      }}
+      header="Admin Sign In"
+      className=" h-auto"
     >
-        <div className="w-full px-16">
-          <div className="flex flex-col mt-4 mx-4">
-            <label htmlFor="username" className="m-2 text-lg font-medium">
-              Username
-            </label>
-            <InputText
-              aria-describedby="username-help"
-              type="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col mt-4 mx-4">
-            <label htmlFor="username" className="m-2 text-lg font-medium">
-              Password
-            </label>
-            <InputText
-              aria-describedby="username-help"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+      <div className="w-full px-16">
+        <div className="flex flex-col mt-4 mx-4">
+          <label htmlFor="username" className="m-2 text-lg font-medium">
+            Username
+          </label>
+          <InputText
+            aria-describedby="username-help"
+            id="username"
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </div>
-        <div className="flex flex-col justify-center items-center mt-10 mb-2 w-full">
-          <button
-            className="px-10 py-4 text-lg font-semibold text-white bg-red-400 rounded-full hover:bg-red-600"
-            raised
-            onClick={() => handleSignin()}
-          >Sign in
-          </button>
-          <Link
-                        // to={route.}
-                        className="text-sm text-blue-700 mt-2 hover:underline"
-                    >
-                        Forgot password
-                    </Link>
+        <div className="flex flex-col mt-4 mx-4">
+          <label htmlFor="password" className="m-2 text-lg font-medium">
+            Password
+          </label>
+          <InputText
+            aria-describedby="username-help"
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+                  <Link
+          // to={route.FORGOTPASSWORD}
+          className="text-sm block text-blue-700 mt-2 "
+        >
+  <span class="hover:underline">Forgot Password</span>
+        </Link>
         </div>
-
+      </div>
+      <div className="flex flex-col justify-center items-center mt-10 mb-2 w-full">
+        <button
+          className="px-10 py-4 text-lg font-semibold text-white bg-red-400 rounded-full hover:bg-red-600 "
+          raised
+          onClick={() => handleSignin()}
+        >
+          <span className="hover:underline">Sign in</span>
+        </button>
+      </div>
     </Dialog>
   );
 }

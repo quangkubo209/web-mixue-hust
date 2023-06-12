@@ -1,5 +1,9 @@
 import axios from "axios";
 
+
+// config api : 
+// -- check whether refresh token has expired or not??
+// -- add token to header.
 const axiosClient = axios.create({
     baseURL: import.meta.env.VITE_REACT_BASE_URL,
     headers: {
@@ -20,7 +24,6 @@ axiosClient.interceptors.response.use(
         const originalConfig = error.config;
         if (
             originalConfig.url !== "auth/sign-in" &&
-            originalConfig.url !== "auth/sign-up" &&
             originalConfig.url !== "auth/sign-out" &&
             error.response
         ) {

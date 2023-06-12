@@ -1,7 +1,9 @@
 const route = {
     HOME: "/",
-    CRUDPRODUCT: "/crud",
+    PRODUCTMANAGEMENT: "/admin/manage",
     VERTICALMENUBAR: "/menu",
+    DASHBOARD: "/admin/dashboard", 
+    ADMINPAGE: "/admin",
 };
 
 export default route;
