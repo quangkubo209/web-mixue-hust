@@ -4,6 +4,7 @@ const route = {
     VERTICALMENUBAR: "/menu",
     DASHBOARD: "/admin/dashboard", 
     ADMINPAGE: "/admin",
+    ANALYTICS: "/admin/analytics",
 };
 
 export default route;
