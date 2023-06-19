@@ -1,63 +1,3 @@
-// import React from 'react';
-// import { useState } from 'react';
-// import { Avatar } from 'primereact/avatar';
-// import { Link } from 'react-router-dom';
-// import logo from '../assets/images/baycho.jpg';
-
-// const VerticalMenuBar = () => {
-//   const [selectedMenu, setSelectedMenu] = useState('dashboard');
-
-//   const menuItems = [
-//     { id: 'dashboard', label: 'Dashboard', icon: 'pi pi-home' },
-//     { id: 'orders', label: 'Orders', icon: 'pi pi-shopping-cart' },
-//     { id: 'manage', label: 'Manage Page', icon: '' },
-//     { id: 'help', label: 'Help', icon: 'pi pi-question' },
-//   ];
-
-//   const handleMenuClick = (menuId) => {
-//     setSelectedMenu(menuId);
-//   };
-
-//   return (
-//     <div className="flex h-screen">
-//       <div className="bg-red-200 w-full flex flex-col justify-between">
-//         <div className="p-4">
-//           <div className="mb-8 border-b border-gray-400">
-//             {/* Phần hiển thị avatar và admin */}
-//             <Avatar image={logo} size="large" shape="circle" className="mx-auto mb-2" />
-//             <div className="text-4xl text-center">Admin</div>
-//           </div>
-//           <nav>
-//             {/* Menu */}
-//             <ul>
-//               {menuItems.map((menuItem) => (
-//                 <li
-//                   key={menuItem.id}
-//                   className={`p-2 cursor-pointer hover:bg-gray-300 hover:rounded-xl ${
-//                     selectedMenu === menuItem.id ? 'bg-gray-300 rounded-xl' : ''
-//                   }`}
-//                   onClick={() => handleMenuClick(menuItem.id)}
-//                 >
-//                   <div className="flex items-center">
-//                     <i className={menuItem.icon}></i>
-//                     <span className="ml-2 text-lg font-bold">{menuItem.label}</span>
-//                   </div>
-//                 </li>
-//               ))}
-//             </ul>
-//           </nav>
-//         </div>
-//         <div className="p-4 border-t border-gray-400 mx-4 p-8">
-//           {/* Phần log out */}
-//           <button className="p-2 w-full bg-red-500 text-white rounded">Log Out</button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default VerticalMenuBar;
-
 import React from "react";
 import { useState } from "react";
 import { Avatar } from "primereact/avatar";
@@ -99,13 +39,14 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
 
   return (
     <div
-      className={`flex h-screen text-white xl:w-1/6 w-60 fixed xl:top-32 top-24 xl:left-0 z-10
+      className={`flex text-white xl:w-1/6 w-60 fixed xl:top-32 top-24 xl:left-0 z-20
       ${!isMenuClicked ? "-left-full" : "left-0"}`}
       style={{
         transition: "all 0.25s ease-in-out",
+        height: "100vh",
       }}
     >
-      <div className=" bg-gradient-to-b from-red-400 via-red-400 to-red-300 w-full flex flex-col justify-between">
+      <div className=" bg-gradient-to-b from-red-400 via-red-400 to-red-300 w-full flex flex-col">
         <div className="p-4">
           <nav>
             {/* Menu */}
@@ -128,14 +69,15 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
                 </li>
               ))}
             </ul>
+            <button className="mt-4 flex flex-row items-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700">
+              <i className="pi pi-sign-out mr-2"></i>
+              <span className="font-bold text-lg">Log Out</span>
+            </button>
           </nav>
         </div>
-        <div className="absolute py-4 bottom-1/4 border rounded-lg border-gray-400 bg-gray-200 w-3/4 flex flex-col items-center self-center">
+
+        <div className="mt-10 py-4 border rounded-lg border-gray-400 bg-gray-200 w-3/4 flex flex-col items-center self-center">
           {/* Phần log out */}
-          <button className="flex flex-row items-center p-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700">
-            <i className="pi pi-sign-out mr-2"></i>
-            <span className="font-bold text-lg">Log Out</span>
-          </button>
 
           {/* Biểu tượng */}
           <div flex flex-col items-center>

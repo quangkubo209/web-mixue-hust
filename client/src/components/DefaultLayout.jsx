@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MenuBar from "./MenuBar";
 import { Navigate, Outlet } from "react-router-dom";
-import HeaderBar from "./HeaderBar";
+import HeaderBar from "./HeaderBar/HeaderBar";
 import { useNavigate } from "react-router-dom";
 
 export default function DefaultLayout() {
@@ -16,7 +16,7 @@ export default function DefaultLayout() {
     navigate("/admin/dashboard");
   }, []);
   return (
-    <div className="card relative h-full w-screen bg-white">
+    <div className="card relative bg-white">
       <HeaderBar onMenuClick={handleMenuClick} isMenuClicked={isMenuClicked} />
       <MenuBar isMenuClicked={isMenuClicked} />
       <div className="flex flex-row xl:mt-32 mt-24 justify-end h-full">
