@@ -6,6 +6,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { Dialog } from "primereact/dialog";
 import ProductDialogFooter from "./ProductDialogFooter";
 import {InputTextarea} from "primereact/inputtextarea";
+import productApi from "../../api/productApi";
 
 export const ProductAddDialog = ({  visible, setVisible }) => {
   // const [name, setName] = useState("");

@@ -67,10 +67,21 @@ import { Avatar } from 'primereact/avatar';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/images/baycho.jpg';
 import route from "../constants/route";
+import { userStateContext } from "../contexts/StateProvider";
+
 
 const VerticalMenuBar = () => {
   const [selectedMenu, setSelectedMenu] = useState('dashboard');
   const navigate = useNavigate();
+  const { currentUser, setCurrentUser } = userStateContext();
+
+  const handleLogout = () => {
+    setCurrentUser({});
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+
+    navigate(route.HOME);
+  }
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: 'pi pi-home', url:route.DASHBOARD },
@@ -124,7 +135,11 @@ const VerticalMenuBar = () => {
         </div>
         <div className="px-16 py-8 mb-4 border rounded-lg border-gray-400 mx-4 bg-gray-200">
   {/* Phần log out */}
-  <button className="flex flex-row items-center p-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700">
+  <button  
+  className="flex flex-row items-center p-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
+  onClick={handleLogout}
+  >
+
     <i className='pi pi-sign-out mr-2'></i>
     <span className='font-bold text-lg'>Log Out</span>
   </button>

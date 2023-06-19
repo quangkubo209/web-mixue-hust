@@ -1,7 +1,7 @@
 import axiosClient from "./axiosClient";
 
 
-const PREFIX = "/product";
+const PREFIX = "/admin/products";
 
 const productApi = {
     getAllProduct: () => {

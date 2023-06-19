@@ -8,7 +8,7 @@ const authApi = {
         return axiosClient.post(url, data);
     },
     signout: () => {
-        const url = `${PREFIX}/logout`;
+        const url = `${PREFIX}/signout`;
         return axiosClient.post(url);
     },
     changePassword: (data) => {

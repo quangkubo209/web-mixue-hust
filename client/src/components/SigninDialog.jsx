@@ -6,6 +6,7 @@ import { useState } from "react";
 // import authApi from "../../api/authApi";
 import { userStateContext } from "../contexts/StateProvider";
 import { Dialog } from "primereact/dialog";
+import authApi from "../api/authApi";
 
 export default function Signin({ visible, setVisible }) {
   const navigate = useNavigate();
@@ -33,6 +34,12 @@ export default function Signin({ visible, setVisible }) {
         //   localStorage.setItem("TOKEN", response.data.tokens.accessToken);
         //   return navigate(route.HOME);
         // }
+        if(response.data.success){
+          setCurrentUser(response.data.user);
+          localStorage.setItem("userId", response.data.user._id);
+          localStorage.setItem("token", response.data.token);
+          return navigate(route.ADMINPAGE);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -40,7 +47,6 @@ export default function Signin({ visible, setVisible }) {
 
     submit();
   };
-
   return (
     <Dialog
       visible={visible}
