@@ -10,7 +10,7 @@ import authApi from "../api/authApi";
 
 export default function Signin({ visible, setVisible }) {
   const navigate = useNavigate();
-  const { setCurrentUser } = userStateContext();
+  const { currentUser, setCurrentUser } = userStateContext();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,22 +23,12 @@ export default function Signin({ visible, setVisible }) {
           password,
         };
         const response = await authApi.signin(data);
-
-        // if (response.data.type === "SUCCESS") {
-        //   setCurrentUser(response.data.user);
-        //   localStorage.setItem("userId", response.data.user._id);
-        //   localStorage.setItem(
-        //     "REFRESH_TOKEN",
-        //     response.data.tokens.refreshToken
-        //   );
-        //   localStorage.setItem("TOKEN", response.data.tokens.accessToken);
-        //   return navigate(route.HOME);
-        // }
         if(response.data.success){
-          setCurrentUser(response.data.user);
-          localStorage.setItem("userId", response.data.user._id);
-          localStorage.setItem("token", response.data.token);
+          setCurrentUser(response.data.admin);
+          localStorage.setItem("ADMINID", response.data.admin._id);
+          localStorage.setItem("TOKEN", response.data.token);
           return navigate(route.ADMINPAGE);
+          console.log(currentUser);
         }
       } catch (err) {
         console.log(err);

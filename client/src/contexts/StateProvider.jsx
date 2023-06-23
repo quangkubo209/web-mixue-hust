@@ -9,7 +9,7 @@ export const StateProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState({});
 
     useEffect(() => {
-        if (localStorage.getItem("TOKEN")) {
+        if (localStorage.getItem("token")) {
             const fetch = async () => {
                 try {
                     const response = await userApi.getUserByToken();

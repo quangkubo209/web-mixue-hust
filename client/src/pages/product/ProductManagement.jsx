@@ -4,9 +4,10 @@ import { Button } from "primereact/button";
 import { ProductAddDialog } from "./ProductAddDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
 import { DialogDeleteProduct} from "./DialogDeleteProduct";
-import trasua from "../../assets/images/trasua.png";
 import { Card } from "primereact/card";
-import {Toolbar} from "primereact/toolbar";
+import {Toolbar} from "primereact/toolbar"
+import productApi from "../../api/productApi";
+import { toastContext } from "../../contexts/ToastProvider";
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -16,188 +17,206 @@ const ProductManagement = () => {
   const [visibleDeleteDialog, setVisibleDeleteDialog] = useState(false);
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const dataExample = [
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-    {
-      name: "tra sua o long",
-      category: "beverage",
-      description: "San pham tra sua duoc lam tu nhung la che xanh ",
-      basePrice: 12,
-      variations: [
-        {
-          size: "S",
-          price: 34,
-        },
-        {
-          size: "M",
-          price: 23,
-        },
-      ],
-      image: trasua,
-    },
-  ];
+
+  // const dataExample = [
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  //   {
+  //     name: "tra sua o long",
+  //     category: "beverage",
+  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
+  //     basePrice: 12,
+  //     variations: [
+  //       {
+  //         size: "S",
+  //         price: 34,
+  //       },
+  //       {
+  //         size: "M",
+  //         price: 23,
+  //       },
+  //     ],
+  //     image: trasua,
+  //   },
+  // ];
+
+  const { toastSuccess, toastError } = toastContext();
 
   useEffect(() => {
-    setProducts(dataExample);
-    // Fetch products from backend or any other data source
-    // and set the products state
-    // Example:
-    // const fetchedProducts = fetchProducts();
-    // setProducts(fetchedProducts);
-  }, []);
+    const fetchApi = async () => {
+        setLoading(true);
+        try {
+            const response = await productApi.getAllProduct();
+            if (response.data.type === "SUCCESS") {
+                setProducts(response.data.products);
+            }
+
+            if (response.data.products.length < 1) {
+                console.log("No product founddd!");
+            }
+        } catch (err) {
+            toastError(err.message);
+            // console.log(err);
+            setProducts([]);
+        }
+        setLoading(false);
+    };
+
+    fetchApi();
+}, [productDialogVisible, visibleDeleteDialog, visibleEditDialog]);
 
   const handleSaveProduct = (product) => {
     // Save or update the product to backend or any other data source
@@ -247,12 +266,12 @@ const ProductManagement = () => {
   return (
     <div className="Card flex flex-col mx-20 my-4">
       <Toolbar
-        className="mb-4"
+        className="mb-4 bg-white"
         left={
           <>
             <button
               type="button"
-              class="px-4 py-2 bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
+              class="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
               onClick={handleAddProduct}
             >
               <i class="pi pi-plus mr-1"></i>Add 

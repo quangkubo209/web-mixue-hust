@@ -15,11 +15,11 @@ module.exports = async (req, res, next) => {
         //decode token
         const decoded = jwt.verify(token, config.jwt.jwt_secret);
 
-        const user = await Admin.findById(decoded.id).select(
+        const admin = await Admin.findById(decoded.id).select(
             "username password"
         );
 
-        if (!user)
+        if (!admin)
             return next(
                 new CustomErrorHandler(
                     401,
@@ -35,7 +35,7 @@ module.exports = async (req, res, next) => {
         //         )
         //     );
 
-        req.user = user;
+        req.admin = admin;
         next();
     } catch (err) {
         next(new CustomErrorHandler(401, err.message));

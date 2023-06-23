@@ -16,7 +16,7 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
     setCurrentUser({});
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
-
+    localStorage.removeItem("REFRESH_TOKEN");
     navigate(route.HOME);
   }
 
@@ -80,23 +80,14 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
                 </li>
               ))}
             </ul>
-            <button className="mt-4 flex flex-row items-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700">
+            <button className="mt-4 flex flex-row items-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
+            onClick={handleLogout}
+            >
               <i className="pi pi-sign-out mr-2"></i>
               <span className="font-bold text-lg">Log Out</span>
             </button>
           </nav>
         </div>
-        <div className="px-16 py-8 mb-4 border rounded-lg border-gray-400 mx-4 bg-gray-200">
-  {/* Phần log out */}
-  <button  
-  className="flex flex-row items-center p-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
-  onClick={handleLogout}
-  >
-
-    <i className='pi pi-sign-out mr-2'></i>
-    <span className='font-bold text-lg'>Log Out</span>
-  </button>
-  </div>
 
         <div className="mt-10 py-4 border rounded-lg border-gray-400 bg-gray-200 w-3/4 flex flex-col items-center self-center">
           {/* Phần log out */}

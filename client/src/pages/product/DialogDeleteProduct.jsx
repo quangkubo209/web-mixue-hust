@@ -51,7 +51,8 @@ export  function DialogDeleteProduct({ id, name, visible, setVisible
                 footer={footerContent}
             >
                 {!loading && (
-                    <span>Are you sure to delete <span className="text-red-500">{name}</span>? </span>
+                    <span>Are you sure to delete <span className="text-red-500">{name}</span>? 
+                    </span>
                 )}
                 {loading && (
                     <div className="w-full h-full flex justify-center items-center">

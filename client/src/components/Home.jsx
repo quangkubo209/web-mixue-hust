@@ -8,13 +8,14 @@ export default function Home() {
   const navigate = useNavigate();
   const [visibleSignin, setVisibleSignin] = useState(false);
 
-  useEffect(() => {
-    let token = localStorage.getItem("token");
-    token = "dmquang";
-    if (token) {
-      navigate(route.ADMINPAGE);
-    }
-  }, []);
+  // useEffect(() => {
+  //   let token = localStorage.getItem("token");
+  //   token = "dmquang";
+  //   if (token) {
+  //     navigate(route.ADMINPAGE);
+  //   }
+  // }, []);
+
   const handleLogin = () => {
     setVisibleSignin(true);
   };

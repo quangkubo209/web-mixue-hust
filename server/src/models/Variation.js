@@ -13,4 +13,4 @@ const variationSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Variation", variationSchema);
+module.exports = mongoose.model("Variation", variationSchema, "variations");

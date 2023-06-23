@@ -7,7 +7,7 @@ import ProductManagement from "../pages/product/ProductManagement";
 import Analytics from "../pages/analytics";
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: route.HOME,
     element: <Home />,
   },
   {

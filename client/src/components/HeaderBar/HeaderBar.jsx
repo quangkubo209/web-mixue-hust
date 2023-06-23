@@ -59,8 +59,8 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
             onClick={() => onMenuClick(!isMenuClicked)}
           ></i>
 
-          <div className="xl:text-4xl text-3xl font-semibold text-red-500 md:block hidden pl-4">
-            Dashboard
+          <div className="xl:text-4xl text-3xl font-bold text-red-500 md:block hidden pl-4">
+            MIXUEHUST
           </div>
         </div>
 
