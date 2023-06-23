@@ -3,21 +3,6 @@ import { Button } from "primereact/button";
 
 const  ProductDialogFooter = (props) => {
     return (
-      // <React.Fragment>
-      //   <Button
-      //     label="Cancel"
-      //     icon="pi pi-times"
-      //     className="p-button-text"
-      //     onClick={props.Cancel}
-      //   />
-      //   <Button
-      //     label="Save"
-      //     icon="pi pi-check"
-      //     className="p-button-text"
-      //     onClick={props.Save}
-      //   />
-      // </React.Fragment>
-      // bg-blue-300 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline
       <div className="w-full flex justify-center mt-4 mb-4">
         <Button
           icon="pi pi-check"

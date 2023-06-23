@@ -14,7 +14,7 @@ const authApi = {
     changePassword: (data) => {
         const url = `${PREFIX}/change-password`;
         return axiosClient.post(url, data);
-    }
+    }, 
 };
 
 export default authApi;

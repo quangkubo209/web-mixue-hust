@@ -3,11 +3,13 @@ import { Button } from "primereact/button";
 // import ProductGrid from './ProductGrid';
 import { ProductAddDialog } from "./ProductAddDialog";
 import { ProductEditDialog } from "./ProductEditDialog";
-import { DialogDeleteProduct} from "./DialogDeleteProduct";
+import { DialogDeleteProduct } from "./DialogDeleteProduct";
 import { Card } from "primereact/card";
-import {Toolbar} from "primereact/toolbar"
+import { Toolbar } from "primereact/toolbar";
 import productApi from "../../api/productApi";
 import { toastContext } from "../../contexts/ToastProvider";
+import { ProgressSpinner } from "primereact/progressspinner";
+
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -19,214 +21,33 @@ const ProductManagement = () => {
   const [productName, setProductName] = useState("");
   const [loading, setLoading] = useState(false);
 
-
-  // const dataExample = [
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  //   {
-  //     name: "tra sua o long",
-  //     category: "beverage",
-  //     description: "San pham tra sua duoc lam tu nhung la che xanh ",
-  //     basePrice: 12,
-  //     variations: [
-  //       {
-  //         size: "S",
-  //         price: 34,
-  //       },
-  //       {
-  //         size: "M",
-  //         price: 23,
-  //       },
-  //     ],
-  //     image: trasua,
-  //   },
-  // ];
-
   const { toastSuccess, toastError } = toastContext();
 
   useEffect(() => {
     const fetchApi = async () => {
-        setLoading(true);
-        try {
-            const response = await productApi.getAllProduct();
-            if (response.data.type === "SUCCESS") {
-                setProducts(response.data.products);
-            }
-
-            if (response.data.products.length < 1) {
-                console.log("No product founddd!");
-            }
-        } catch (err) {
-            toastError(err.message);
-            // console.log(err);
-            setProducts([]);
+      setLoading(true);
+      try {
+        const response = await productApi.getAllProduct();
+        if (response.data.status === "success") {
+          console.log(response.data.data);
+          setProducts(response.data.data);
         }
-        setLoading(false);
+
+        if (response.data.data.length < 1) {
+          console.log("No product founddd!");
+        }
+      } catch (err) {
+        toastError(err.message);
+        // console.log(err);
+        setProducts([]);
+      }
+      setLoading(false);
     };
 
     fetchApi();
-}, [productDialogVisible, visibleDeleteDialog, visibleEditDialog]);
+  }, [productDialogVisible, visibleDeleteDialog, visibleEditDialog]);
 
   const handleSaveProduct = (product) => {
-    // Save or update the product to backend or any other data source
-    // and update the products state
-    // Example:
-    // saveProduct(product);
-    // const updatedProducts = fetchProducts();
-    // setProducts(updatedProducts);
-
-    // For this example, we'll just update the state directly
     if (selectedProduct) {
       const updatedProducts = products.map((p) =>
         p.id === selectedProduct.id ? product : p
@@ -246,14 +67,6 @@ const ProductManagement = () => {
   };
 
   const handleDeleteProduct = (product) => {
-    // Delete the product from backend or any other data source
-    // and update the products state
-    // Example:
-    // deleteProduct(product);
-    // const updatedProducts = fetchProducts();
-    // setProducts(updatedProducts);
-
-    // For this example, we'll just update the state directly
     setSelectedProduct(product);
     setVisibleDeleteDialog(true);
   };
@@ -274,18 +87,24 @@ const ProductManagement = () => {
               class="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
               onClick={handleAddProduct}
             >
-              <i class="pi pi-plus mr-1"></i>Add 
+              <i class="pi pi-plus mr-1"></i>Add
             </button>
           </>
         }
       ></Toolbar>
 
+      {loading && (
+        <div className="w-full h-[600px] flex justify-center items-center">
+          <ProgressSpinner className=" w-full" />
+        </div>
+      )}
+
       {/* <ProductGrid products={products} onEdit={handleEditProduct} onDelete={handleDeleteProduct} /> */}
-      <div className="grid min-[1200px]:grid-cols-3 min-[1440px]:grid-cols-4 min-[1700px]:grid-cols-5  gap-4 ">
+      <div className="grid min-[1200px]:grid-cols-3 min-[1440px]:grid-cols-3 min-[1700px]:grid-cols-4  gap-4 ">
         <>
           {products.length > 0 ? (
             products.map((product, index) => (
-              <div key={product.id} className="flex flex-col justify-between">
+              <div key={product._id} className="flex flex-col justify-between">
                 <Card
                   title={product.name}
                   subTitle={product.category}
@@ -316,7 +135,7 @@ const ProductManagement = () => {
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-auto"
+                      className="w-full object-contain h-[200px]"
                     />
                   </div>
                   <div className="mt-4">
@@ -329,16 +148,15 @@ const ProductManagement = () => {
                   <div className="mt-4">
                     <div>
                       <strong>Size: </strong>
-                      {product.variations.map((item) => item.size).join(' ')}
+                      {product.variations.map((item) => item.size).join(" ")}
                     </div>
                   </div>
                   <div className="mt-4">
                     <div>
                       <strong>Price: </strong>
-                      {product.variations.map((item) => item.price).join(' ')}
+                      {product.variations.map((item) => item.price).join(" ")}
                     </div>
                   </div>
-
                 </Card>
               </div>
             ))
@@ -363,6 +181,7 @@ const ProductManagement = () => {
           visible={visibleEditDialog}
           setVisible={setVisibleEditDialog}
           // product={selectedProduct}
+          productId={productId}
         />
       )}
 

@@ -14,11 +14,12 @@ export  function DialogDeleteProduct({ id, name, visible, setVisible
         setLoading(true);
         try {
             const response = await productApi.deleteProduct(id);
-            if (response.data.type === "Success") {
-                toastSuccess(response.data.message);
+            if (response.data.status === "success") {
+                toastSuccess(response.data.status);
             }
         } catch (err) {
-            toastError(err.response.data.message);
+            // toastError(err.response.data.message);
+            console.log(err);
         }
         setLoading(false);
     };

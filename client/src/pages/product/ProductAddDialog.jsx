@@ -17,25 +17,25 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   // const [description, setDescription] = useState("");
   // const [basePrice, setBasePrice] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(undefined);
   const [variations, setVariations] = useState([]);
   const [preview, setPreview] = useState(undefined);
   const [products, setProducts] = useState({
     name: "",
     category: "",
     description: "",
-    basePrice: null,
+    basePrice: 0,
     // variations: [],
   });
 
   useEffect(() => {
     if (!image) {
-        setPreview(undefined);
-        return;
+      setPreview(undefined);
+      return;
     }
     const imageUrl = URL.createObjectURL(image);
     setPreview(imageUrl);
-}, [image]);
+  }, [image]);
 
   const handelAddProduct = async () => {
     setLoading(true);
@@ -46,16 +46,16 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
       formData.append("basePrice", products.basePrice);
       formData.append("category", products.category);
       formData.append("image", image);
-      formData.append("variations", variation);
-      const response = await productApi.addProduct({
+      formData.append("variations", variations);
+      const response = await productApi.createProduct({
         // ...products,
         // image,
         // variations,
-        formData
+        formData,
       });
-      if (response.data.type === "Success") {
+      if (response.data.status === "success") {
         navigate(route.PRODUCTMANAGEMENT);
-        toastSuccess(response.data.message);
+        // toastSuccess(response.data.message);
       }
     } catch (err) {
       // toastError(err.response.data.message);
@@ -105,8 +105,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
     <>
       <Dialog
         visible={visible} //pass params as addVisible.
-        style={{ width: "60%" }}
-        className="h-auto"
+        className="sm:w-11/12 md:w-10/12 lg:w-3/4 xl:w-2/3 2xl:w-1/2 mx-auto"
         footer={
           <ProductDialogFooter
             Cancel={handleCancelClick}
@@ -123,160 +122,170 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
             <ProgressSpinner />
           </div>
         )}
-        {!loading && 
-                <div className="flex flex-row  rounded-lg">
-                {/* name  */}
-                <div className="w-1/2 flex flex-col  py-8 mr-4 mb-2 rounded-lg ">
-                  <div className="flex flex-row  items-center mb-8">
-                    <label
-                      htmlFor="name"
-                      className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8 "
-                    >
-                      Name
-                    </label>
-                    <InputText
-                      placeholder="Enter name"
-                      id="name"
-                      name="name"
-                      value={products.name}
-                      onChange={handleChange}
-                      className="basis-2/3 mr-8"
-                    />
+        {!loading && (
+          <div className="flex flex-col md:flex-row">
+            {/* name  */}
+            <div className="w-full md:w-1/2  mt-4 ">
+              <div className="flex   mb-8">
+                <label
+                  htmlFor="name"
+                  className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8 "
+                >
+                  Name
+                </label>
+                <InputText
+                  placeholder="Enter name"
+                  id="name"
+                  name="name"
+                  value={products.name}
+                  onChange={handleChange}
+                  className="basis-2/3 mr-8"
+                />
+              </div>
+              {/* category  */}
+              <div className="flex  mb-8">
+                <label
+                  htmlFor="category"
+                  className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
+                >
+                  Category
+                </label>
+                <Dropdown
+                  id="category"
+                  name="category"
+                  options={["ice-cream", "beverage"]}
+                  value={products.category}
+                  onChange={handleChange}
+                  placeholder="Select a category"
+                  className="basis-2/3 mr-8"
+                />
+              </div>
+              <div className="flex  mb-8">
+                <label
+                  htmlFor="description"
+                  className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
+                >
+                  Description
+                </label>
+                <InputTextarea
+                  id="description"
+                  name="description"
+                  value={products.description}
+                  rows={4}
+                  cols={30}
+                  placeholder="Enter description"
+                  onChange={handleChange}
+                  className="basis-2/3 mr-8"
+                />
+              </div>
+              <div className="flex  mb-8">
+                <label
+                  htmlFor="basePrice"
+                  className="basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
+                >
+                  Base Price
+                </label>
+                <InputNumber
+                  id="basePrice"
+                  name="basePrice"
+                  placeholder="Enter base price"
+                  value={products.basePrice}
+                  onValueChange={handleChange}
+                  className="basis-2/3 mr-8"
+                />
+              </div>
+            </div>
+
+            <div className="w-full md:w-1/2  flex flex-col py-4 mr-4 mb-4 rounded-lg ">
+              {/* ---------------------- Image ------------------------- */}
+              <div className="w-full mr-8">
+                <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left ml-6">
+                  Image
+                </label>
+
+                <img
+                  src={preview}
+                  alt="image"
+                  className="rounded-md h-52 w-52 object-cover mx-auto shadow-xl"
+                />
+
+                <input
+                  type="file"
+                  id="product-main-image"
+                  hidden
+                  onChange={(event) => {
+                    setImage(event.target.files[0]);
+                    // setImage(URL.createObjectURL(event.target.files[0]));
+                  }}
+                />
+                <label
+                  htmlFor="product-main-image"
+                  className="font-bold flex justify-center items-center h-12 w-1/4 mx-auto mt-6 mb-2 bg-gray-400 hover:bg-gray-500 text-white hover:cursor-pointer rounded-md"
+                >
+                  <div className="flex items-center my-2">
+                    <i className="pi pi-image mr-4" /> <span>Add</span>
                   </div>
-                  {/* category  */}
-                  <div className="flex items-center mb-6">
-                    <label
-                      htmlFor="category"
-                      className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
+                </label>
+              </div>
+
+              {/* ------------------------ add variation  */}
+              <div className="mb-6">
+                <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left mr-4 ml-6 mb-8">
+                  Variations
+                </label>
+                {variations &&
+                  variations.map((variation, index) => (
+                    <div
+                      key={index}
+                      className="ml-6 flex flex-row items-center justify-start mb-4 relative"
                     >
-                      Category
-                    </label>
-                    <Dropdown
-                      id="category"
-                      name="category"
-                      options={["ice-cream", "beverage"]}
-                      value={products.category}
-                      onChange={handleChange}
-                      placeholder="Select a category"
-                      className="basis-2/3 mr-8"
-                    />
-                  </div>
-                  <div className="flex items-center mb-6">
-                    <label
-                      htmlFor="description"
-                      className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
-                    >
-                      Description
-                    </label>
-                    <InputTextarea
-                      id="description"
-                      name="description"
-                      value={products.description}
-                      rows={4}
-                      cols={30}
-                      placeholder="Enter description"
-                      onChange={handleChange}
-                      className="basis-2/3 mr-8"
-                    />
-                  </div>
-                  <div className="flex items-center mb-6">
-                    <label
-                      htmlFor="basePrice"
-                      className="basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
-                    >
-                      Base Price
-                    </label>
-                    <InputNumber
-                      id="basePrice"
-                      name="basePrice"
-                      placeholder="Enter base price"
-                      value={products.basePrice}
-                      onValueChange={handleChange}
-                      className="basis-2/3 mr-8"
-                    />
-                  </div>
-                </div>
-      
-                <div className="w-1/2 flex flex-col  py-8 mr-4 mb-2 rounded-lg ">
-                  {/* ---------------------- Image ------------------------- */}
-                  <div className="w-full mr-8">
-                    <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left ml-6">
-                      Image
-                    </label>
-                    <img
-                      // src={URL.createObjectURL(image)}
-                      src = {preview}
-                      alt="preview"
-                      className="rounded-md h-52 w-52 object-cover mx-auto shadow-xl"
-                    />
-                    <input
-                      type="file"
-                      id="product-main-image"
-                      hidden
-                      onChange={(event) => {
-                        setImage(event.target.files[0]);
-                        // setImage(URL.createObjectURL(event.target.files[0]));
-                      }}
-                    />
-                    <label
-                      htmlFor="product-main-image"
-                      className="font-bold flex justify-center items-center h-12 w-1/4 mx-auto mt-6 mb-2 bg-blue-500 text-white hover:cursor-pointer rounded-md"
-                    >
-                      <div className="flex items-center my-2">
-                        <i className="pi pi-image mr-4" /> <span>Add</span>
+                      {/* Size Dropdown */}
+                      <div className="w-1/3 mr-2">
+                        <Dropdown
+                          value={variation.size}
+                          placeholder="Size"
+                          options={["S", "M", "L"]}
+                          onChange={(e) =>
+                            handleVariationSizeChange(index, e.target.value)
+                          }
+                          className="w-full"
+                        />
                       </div>
-                    </label>
-                  </div>
-      
-                  {/* ------------------------ add variation  */}
-                  <div className="mb-6">
-                    <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left mr-4 ml-5 ">
-                      Variations
-                    </label>
-                    {variations.map((variation, index) => (
-                      <div key={index} className="flex items-center mb-6">
-                        <div className="flex  mr-2 ml-6 basis-1/3">
-                          <Dropdown
-                            value={variation.size}
-                            // options={variation.size}
-                            placeholder="Select size"
-                            options={["S", "M", "L"]}
-                            onChange={(e) =>
-                              handleVariationSizeChange(index, e.target.value)
-                            }
-                            className=" w-full mr-2"
-                          />
-                        </div>
-      
-                        <div className="flex items-center mr-4 basis-1/3">
-                          <InputNumber
-                            value={variation.price}
-                            placeholder="Enter price"
-                            onValueChange={(e) =>
-                              handleVariationPriceChange(index, e.target.value)
-                            }
-                            className="ml-2 w-full"
-                          />
-                        </div>
-      
-                        <div className="cursor-pointer text-red-500 ml-4 mr-4">
-                          <span onClick={() => handleRemoveVariation(index)}>
-                            <i className="pi pi-trash"></i>
-                          </span>
-                        </div>
+
+                      {/* Price InputNumber */}
+                      <div className="w-1/3 mr-4">
+                        <InputNumber
+                          value={variation.price}
+                          placeholder="Price"
+                          onValueChange={(e) =>
+                            handleVariationPriceChange(index, e.target.value)
+                          }
+                          className="w-full"
+                        />
                       </div>
-                    ))}
-                    <Button
-                      label="New"
-                      onClick={handleAddVariation}
-                      icon="pi pi-plus"
-                      className=" ml-6 rounded-full bg-purple-500 hover:bg-purple-800"
-                    />
-                  </div>
-      
-                  {/* -------------------------------- */}
-                </div>
-              </div>}
+
+                      {/* Delete Button */}
+                      <div className="cursor-pointer text-red-500 absolute right-2" >
+                        <span onClick={() => handleRemoveVariation(index)}>
+                          <i className="pi pi-trash"></i>
+                        </span>
+                      </div>
+
+                    </div>
+                  ))}
+                <span
+                  className="ml-8 text-white font-bold hover:bg-gray-500 cursor-pointer rounded-lg border p-2 bg-gray-400"
+                  onClick={() => handleAddVariation()}
+                >
+                  <i className="pi pi-plus mr-2 "></i>
+                  Add variation
+                </span>
+              </div>
+
+              {/* -------------------------------- */}
+            </div>
+          </div>
+        )}
       </Dialog>
     </>
   );

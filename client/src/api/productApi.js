@@ -14,7 +14,7 @@ const productApi = {
         return axiosClient.get(url);
     },
 
-    addProduct: (data) => {
+    createProduct: (data) => {
         const url = `${PREFIX}`;
         return axiosClient.post(url, data, {
             headers: {

@@ -4,21 +4,20 @@ import { Avatar } from "primereact/avatar";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/baycho.jpg";
 import route from "../constants/route";
-import { userStateContext } from "../contexts/StateProvider";
-
+// import { userStateContext } from "../contexts/StateProvider";
 
 const VerticalMenuBar = ({ isMenuClicked }) => {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = userStateContext();
+  // const { currentUser, setCurrentUser } = userStateContext();
 
   const handleLogout = () => {
-    setCurrentUser({});
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("REFRESH_TOKEN");
+    // setCurrentUser({});
+    localStorage.removeItem("TOKEN");
+    localStorage.removeItem("ADMINID");
+    // localStorage.removeItem("REFRESH_TOKEN");
     navigate(route.HOME);
-  }
+  };
 
   const menuItems = [
     {
@@ -80,8 +79,9 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
                 </li>
               ))}
             </ul>
-            <button className="mt-4 flex flex-row items-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
-            onClick={handleLogout}
+            <button
+              className="mt-4 flex flex-row items-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
+              onClick={handleLogout}
             >
               <i className="pi pi-sign-out mr-2"></i>
               <span className="font-bold text-lg">Log Out</span>
@@ -93,7 +93,7 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
           {/* Phần log out */}
 
           {/* Biểu tượng */}
-          <div flex flex-col items-center>
+          <div className="flex flex-col items-center">
             <div className="flex items-center justify-center mt-4">
               <a href="https://www.facebook.com">
                 <i className="pi pi-facebook mx-2 text-blue-500 text-2xl hover:text-blue-700"></i>

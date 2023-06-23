@@ -20,7 +20,13 @@ const productSchema = new mongoose.Schema({
         required: true,
         max: 999999
     },
-    variations: [Variation.schema],
+    // variations: [Variation.schema],
+    variations: 
+    [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Variation",
+    },
+],
     image: {
         type: String,
         required: true

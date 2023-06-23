@@ -1,7 +1,9 @@
 const ProductModel = require("../models/Product");
 
 exports.getAllProducts = async () => {
-    return await ProductModel.find({});
+    // const response =  await ProductModel.find().populate('variations', 'size price');
+    const response = await ProductModel.find({}).populate("variations");
+    return response;
 }
 
 exports.addProduct = async (product) => {
@@ -9,7 +11,7 @@ exports.addProduct = async (product) => {
 }
 
 exports.getProductById = async (id) => {
-    return await ProductModel.findById(id);
+    return await ProductModel.findById(id).lean();
 }
 
 exports.updateProduct = async (id, product) => {

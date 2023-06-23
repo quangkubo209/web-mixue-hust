@@ -191,7 +191,7 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
                 {Array(12)
                   .fill(0)
                   .map((item, index) => (
-                    <NotificationCard />
+                    <NotificationCard key={index}/>
                   ))}
               </div>
             </div>
@@ -224,7 +224,7 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
                 {Array(12)
                   .fill(0)
                   .map((item, index) => (
-                    <MessageCard />
+                    <MessageCard key={index}/>
                   ))}
               </div>
             </div>
