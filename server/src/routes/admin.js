@@ -43,7 +43,7 @@ router.post('/login', async (req, res, next) => {
     
         //sau khi đăng nhập thành công thì tạo ra 1 token.
         const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-        res.header('TOKEN', token).send(token);
+        // res.header('TOKEN', token).send(token);
         res.status(200).json({success:true, message:"Log in succesfully",admin, token});
     }
     catch(err){
