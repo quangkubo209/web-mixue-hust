@@ -40,20 +40,18 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   const handelAddProduct = async () => {
     setLoading(true);
     try {
-      // const formData = new FormData();
-      // formData.append("name", products.name);
-      // formData.append("description", products.description);
-      // formData.append("basePrice", products.basePrice);
-      // formData.append("category", products.category);
-      // formData.append("image", image);
-      // formData.append("variations", variations);
-      // const response = await productApi.createProduct({
-      //   // ...products,
-      //   // image,
-      //   // variations,
-      //   formData,
-      // });
-      const response = await productApi.createProduct({...products, image, variations});
+      const formData = new FormData();
+
+      formData.append("name", products.name);
+      formData.append("description", products.description);
+      formData.append("basePrice", products.basePrice);
+      formData.append("category", products.category);
+      formData.append("image", image);
+      formData.append("variations", variations);
+      const response = await productApi.createProduct(
+        formData
+      );
+      // const response = await productApi.createProduct({...products, image, variations});
       if (response.data.status === "success") {
         navigate(route.PRODUCTMANAGEMENT);
         toastSuccess(response.data.status);
@@ -127,7 +125,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
           <div className="flex flex-col md:flex-row">
             {/* name  */}
             <div className="w-full md:w-1/2  mt-4 ">
-              <div className="flex   mb-8">
+              <div className="flex items-center flex-row   mb-8">
                 <label
                   htmlFor="name"
                   className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8 "
@@ -143,8 +141,8 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                   className="basis-2/3 mr-8"
                 />
               </div>
-              {/* category  */}
-              <div className="flex  mb-8">
+              {/* category  */} 
+              <div className="flex items-center flex-row  mb-8">
                 <label
                   htmlFor="category"
                   className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
@@ -161,7 +159,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                   className="basis-2/3 mr-8"
                 />
               </div>
-              <div className="flex  mb-8">
+              <div className="flex  flex-row items-center mb-8">
                 <label
                   htmlFor="description"
                   className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
@@ -179,7 +177,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                   className="basis-2/3 mr-8"
                 />
               </div>
-              <div className="flex  mb-8">
+              <div className="flex flex-row items-center  mb-8">
                 <label
                   htmlFor="basePrice"
                   className="basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8"
@@ -241,7 +239,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                       className="ml-6 flex flex-row items-center justify-start mb-4 relative"
                     >
                       {/* Size Dropdown */}
-                      <div className="w-1/3 mr-2">
+                      <div className="w-1/3 mr-2 ">
                         <Dropdown
                           value={variation.size}
                           placeholder="Size"
@@ -254,7 +252,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                       </div>
 
                       {/* Price InputNumber */}
-                      <div className="w-1/3 mr-4">
+                      <div className="w-1/3 mr-4  ">
                         <InputNumber
                           value={variation.price}
                           placeholder="Price"
@@ -266,7 +264,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                       </div>
 
                       {/* Delete Button */}
-                      <div className="cursor-pointer text-red-500 absolute right-2" >
+                      <div className="cursor-pointer text-red-500 absolute right-2 " >
                         <span onClick={() => handleRemoveVariation(index)}>
                           <i className="pi pi-trash"></i>
                         </span>

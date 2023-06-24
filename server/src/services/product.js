@@ -6,8 +6,21 @@ exports.getAllProducts = async () => {
     return response;
 }
 
-exports.addProduct = async (product) => {
-    return await ProductModel.create(product);
+// exports.addProduct = async (product) => {
+//     return await ProductModel.create(product);
+// }
+
+exports.addProduct = async(product) => {
+    const {name, description, category, image, basePrice} = product;
+    const newProduct = await ProductModel.create({
+        name, 
+        description, 
+        category,
+        basePrice, 
+        image
+    });
+    await newProduct.save();
+    return newProduct;
 }
 
 exports.getProductById = async (id) => {

@@ -11,7 +11,6 @@ exports.getAllProducts = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
     try {
-        console.log(req.body);
         const product = await productService.addProduct(req.body);
         res.json({ data: product, status: "success" });
     } catch (err) {
@@ -39,7 +38,6 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
     try {
-        console.log(req.params.id);
         const product = await productService.deleteProduct(req.params.id);
         res.json({ data: product, status: "success" });
     } catch (err) {

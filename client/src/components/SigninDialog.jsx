@@ -27,7 +27,7 @@ export default function Signin({ visible, setVisible }) {
           // setCurrentUser(response.data.admin);
           localStorage.setItem("ADMINID", response.data.admin._id);
           localStorage.setItem("TOKEN", response.data.token);
-          return navigate(route.ADMINPAGE);
+          return navigate(route.DASHBOARD);
           // console.log(currentUser);
         }
       } catch (err) {

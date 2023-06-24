@@ -10,7 +10,6 @@ import productApi from "../../api/productApi";
 import { toastContext } from "../../contexts/ToastProvider";
 import { ProgressSpinner } from "primereact/progressspinner";
 
-
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -29,7 +28,6 @@ const ProductManagement = () => {
       try {
         const response = await productApi.getAllProduct();
         if (response.data.status === "success") {
-          console.log(response.data.data);
           setProducts(response.data.data);
         }
 
@@ -84,10 +82,10 @@ const ProductManagement = () => {
           <>
             <button
               type="button"
-              class="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
+              className="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
               onClick={handleAddProduct}
             >
-              <i class="pi pi-plus mr-1"></i>Add
+              <i className="pi pi-plus mr-1"></i>Add
             </button>
           </>
         }
@@ -139,11 +137,17 @@ const ProductManagement = () => {
                     />
                   </div>
                   <div className="mt-4">
-                    <div>
+                    {/* <div>
                       <strong>Base price: </strong>
-                      <span class="text-s text-red-500">₫</span>
-                      {product.basePrice}
-                    </div>
+                      <span class="text-s text-red-500 pb-2">₫</span>
+                      {new Intl.NumberFormat().format(product.basePrice)}
+                    </div> */}
+                    <span className="text-3xl font-bold text-red-700">
+                      {new Intl.NumberFormat().format(
+                        product.basePrice
+                      )}
+                      <span className="text-sm text-red-500 pb-2">đ</span>
+                    </span>
                   </div>
                   <div className="mt-4">
                     <div>
@@ -154,7 +158,7 @@ const ProductManagement = () => {
                   <div className="mt-4">
                     <div>
                       <strong>Price: </strong>
-                      {product.variations.map((item) => item.price).join(" ")}
+                      {product.variations.map((item) => new Intl.NumberFormat().format(item.price)).join(" ")}
                     </div>
                   </div>
                 </Card>

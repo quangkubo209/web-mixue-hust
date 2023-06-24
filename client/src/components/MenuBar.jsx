@@ -26,7 +26,6 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
       icon: "pi pi-home",
       url: route.DASHBOARD,
     },
-    { id: "orders", label: "Orders", icon: "pi pi-shopping-cart", url: null },
     {
       id: "manage",
       label: "Management",
@@ -38,6 +37,12 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
       label: "Analytics",
       icon: "pi pi-chart-bar",
       url: route.ANALYTICS,
+    },
+    {
+      id: "order",
+      label: "Order",
+      icon: "pi pi-shopping-cart",
+      url: route.ORDER,
     },
     { id: "setting", label: "Setting", icon: "pi pi-cog", url: null },
     { id: "help", label: "Help", icon: "pi pi-question", url: null },

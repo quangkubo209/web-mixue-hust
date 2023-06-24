@@ -5,6 +5,7 @@ import DefaultLayout from "../components/DefaultLayout";
 import Dashboard from "../pages/dashboard";
 import ProductManagement from "../pages/product/ProductManagement";
 import Analytics from "../pages/analytics";
+import OrderManagementPage from "../pages/order/OrderManagement";
 const router = createBrowserRouter([
   {
     path: route.HOME,
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         path: route.ANALYTICS,
         element: <Analytics />,
       },
+      {
+        path: route.ORDER,
+        element: <OrderManagementPage/>
+      }
     ],
   },
 ]);
