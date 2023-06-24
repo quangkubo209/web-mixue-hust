@@ -48,9 +48,8 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
       formData.append("category", products.category);
       formData.append("image", image);
       formData.append("variations", variations);
-      const response = await productApi.createProduct(
-        formData
-      );
+      const response = await productApi.createProduct(formData);
+      console.log("variations: ", variations);
       // const response = await productApi.createProduct({...products, image, variations});
       if (response.data.status === "success") {
         navigate(route.PRODUCTMANAGEMENT);
@@ -64,6 +63,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   };
 
   const handleSaveClick = () => {
+    console.log(variations);
     handelAddProduct();
   };
 

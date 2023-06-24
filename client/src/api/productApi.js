@@ -13,18 +13,27 @@ const productApi = {
     return axiosClient.get(url);
   },
 
+  // createProduct: (data) => {
+  //   let formData = new FormData();
+  //   for (let key in data) {
+  //     if (key === "variationss") {
+  //       formData.append(key, JSON.stringify(data[key]));
+  //     } else formData.append(key, data[key]);
+  //   }
+  //   // for (var pair of formData.entries()) {
+  //   //   console.log(pair[0] + ", " + pair[1]);
+  //   // }
+  //   const url = `${PREFIX}`;
+  //   return axiosClient.post(url, formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   });
+  // },
+
   createProduct: (data) => {
-    let formData = new FormData();
-    for (let key in data) {
-      if (key === "variations") {
-        formData.append(key, JSON.stringify(data[key]));
-      } else formData.append(key, data[key]);
-    }
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
     const url = `${PREFIX}`;
-    return axiosClient.post(url, formData, {
+    return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

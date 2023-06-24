@@ -44,14 +44,20 @@ const {
 //sử dụng midelware để xác thực quyền truy cập của admin.
 router.use(Authorize);
 
+// router
+//   .route("/")
+//   .get(getAllProducts)
+//   .post(upload.single("image"), (req, res) => {
+//     console.log(req.file);
+//     console.log(JSON.parse(req.body.variations));
+//     res.json({ message: "create succesfully!!!" });
+//   }, addProduct);
+
 router
   .route("/")
   .get(getAllProducts)
-  .post(upload.single("image"), (req, res) => {
-    console.log(req.file);
-    console.log(JSON.parse(req.body.variations));
-    res.json({ message: "create succesfully!!!" });
-  });
+  .post(upload.single("image"), addProduct);
+  
 router
   .route("/:id")
   .get(getProductById)

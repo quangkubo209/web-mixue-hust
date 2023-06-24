@@ -20,10 +20,8 @@ getAllProducts = async (req, res) => {
 
 addProduct = async (req, res) => {
   try {
-    console.log(req.file);
-    console.log(req.body);
-    // const product = await productService.addProduct(req.body);
-    // res.json({ data: product, status: "success" });
+    const product = await productService.addProduct(req.body, req.files);
+    res.json({ data: product, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -58,7 +56,7 @@ updateProduct = async (req, res) => {
 
 deleteProduct = async (req, res) => {
   try {
-    console.log(req.params.id);
+    // console.log(req.params.id);
     const product = await productService.deleteProduct(req.params.id);
     res.json({ data: product, status: "success" });
   } catch (err) {

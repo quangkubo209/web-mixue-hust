@@ -1,4 +1,5 @@
 const ProductModel = require("../models/Product");
+const VariationSchema = require("../models/Variation");
 
 exports.getAllProducts = async () => {
     // const response =  await ProductModel.find().populate('variations', 'size price');
@@ -10,16 +11,31 @@ exports.getAllProducts = async () => {
 //     return await ProductModel.create(product);
 // }
 
-exports.addProduct = async(product) => {
-    const {name, description, category, image, basePrice} = product;
+exports.addProduct = async(body, files) => {
+    const {name, description, category, basePrice, variations} = body;
+    // const image = files.find((img) => img.fieldname === "image");
+    const image = files;
+
     const newProduct = await ProductModel.create({
         name, 
         description, 
         category,
         basePrice, 
-        image
+        image, 
+        // variations
     });
+
+    // const variationsId = [] ;
+    if(variations) {
+        const variationData = await Promise.all(
+            variations.map(async(variation) => {
+                const createdVariation = await VariationSchema.create(variation);
+                newProduct.variations.push(createdVariation);
+            })
+        )
+    }
     await newProduct.save();
+
     return newProduct;
 }
 
