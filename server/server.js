@@ -1,16 +1,17 @@
+
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 require("dotenv").config();
 const app = express();
 const connectDB = require("./src/config/mongo");
-
 const PORT = process.env.PORT;
-app.use(cors())
+
+app.use(cors());
 app.use(express.json());
 app.use(
-    express.urlencoded({
-        extended: true,
-    })
+  express.urlencoded({
+    extended: true,
+  })
 );
 
 // import routers
@@ -30,8 +31,8 @@ app.use("/api/products", productRouter);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
-    connectDB();
+  console.log(`Listening on port ${PORT}`);
+  connectDB();
 });
 
-module.exports = app
+module.exports = app;
