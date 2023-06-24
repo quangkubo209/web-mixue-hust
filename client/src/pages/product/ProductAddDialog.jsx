@@ -40,25 +40,26 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   const handelAddProduct = async () => {
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append("name", products.name);
-      formData.append("description", products.description);
-      formData.append("basePrice", products.basePrice);
-      formData.append("category", products.category);
-      formData.append("image", image);
-      formData.append("variations", variations);
-      const response = await productApi.createProduct({
-        // ...products,
-        // image,
-        // variations,
-        formData,
-      });
+      // const formData = new FormData();
+      // formData.append("name", products.name);
+      // formData.append("description", products.description);
+      // formData.append("basePrice", products.basePrice);
+      // formData.append("category", products.category);
+      // formData.append("image", image);
+      // formData.append("variations", variations);
+      // const response = await productApi.createProduct({
+      //   // ...products,
+      //   // image,
+      //   // variations,
+      //   formData,
+      // });
+      const response = await productApi.createProduct({...products, image, variations});
       if (response.data.status === "success") {
         navigate(route.PRODUCTMANAGEMENT);
-        // toastSuccess(response.data.message);
+        toastSuccess(response.data.status);
       }
     } catch (err) {
-      // toastError(err.response.data.message);
+      // toastError(err.response.data.error);
       console.log(err);
     }
     setLoading(false);

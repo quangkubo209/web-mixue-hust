@@ -11,6 +11,7 @@ exports.getAllProducts = async (req, res) => {
 
 exports.addProduct = async (req, res) => {
     try {
+        console.log(req.body);
         const product = await productService.addProduct(req.body);
         res.json({ data: product, status: "success" });
     } catch (err) {
