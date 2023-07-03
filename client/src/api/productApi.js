@@ -41,22 +41,22 @@ const productApi = {
   },
 
   updateProductById: (id, data) => {
-    const url = `${PREFIX}`;
-    return axiosClient.put(url, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  },
-
-  updateMainImage: (data) => {
-    const url = `${PREFIX}/update-mainImage`;
+    const url = `${PREFIX}/update-product/${id}`;
     return axiosClient.patch(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
   },
+
+  // updateMainImage: (data) => {
+  //   const url = `${PREFIX}/update-mainImage`;
+  //   return axiosClient.patch(url, data, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   });
+  // },
 
   deleteProduct: (id) => {
     const url = `${PREFIX}/${id}`;

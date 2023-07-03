@@ -4,7 +4,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/images");
+    cb(null, "./uploads");
   },
   filename: function (req, file, cb) {
     cb(
@@ -18,6 +18,11 @@ const storage = multer.diskStorage({
   },
   encoding: "7bit",
 });
+
+// const storage = multer.memoryStorage();
+
+
+
 const upload = multer({
   storage: storage,
   limits: {
@@ -37,7 +42,7 @@ const {
   getAllProducts,
   addProduct,
   getProductById,
-  updateProduct,
+  updateProductById,
   deleteProduct,
 } = require("../controllers/product");
 
@@ -49,19 +54,30 @@ router.use(Authorize);
 //   .get(getAllProducts)
 //   .post(upload.single("image"), (req, res) => {
 //     console.log(req.file);
-//     console.log(JSON.parse(req.body.variations));
+//     // console.log(JSON.parse(req.body.variations));
+//     variation = JSON.parse(req.body.variations);
+//     const response = await 
 //     res.json({ message: "create succesfully!!!" });
-//   }, addProduct);
+//   });
 
-router
-  .route("/")
-  .get(getAllProducts)
-  .post(upload.single("image"), addProduct);
-  
+router.route("/").get(getAllProducts).post(upload.single("image"), (req, res, next) => {
+  req.body.variations = JSON.parse(req.body.variations);
+  // req.body.filePath = req.file.filename;
+
+  next(); 
+  },  addProduct);
+
 router
   .route("/:id")
   .get(getProductById)
-  .put(updateProduct)
   .delete(deleteProduct);
+
+
+router.route("update-product/:productId").patch(upload.single("image"), (req, res, next) => {
+  req.body.variations = JSON.parse(req.body.variations);
+  // req.body.filePath = req.file.filename;
+
+  next(); 
+  },updateProductById);
 
 module.exports = router;

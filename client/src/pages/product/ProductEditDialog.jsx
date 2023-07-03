@@ -30,6 +30,7 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
       try{
         const response = await productApi.getProductById(productId);
         if(response.data.status === "success"){
+          
           setProducts(response.data.data[0]);
           setImage(response.data.data[0].image);
           setPreview(response.data.data[0].image);
@@ -47,13 +48,24 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
   //update another fields of products
     const handleUpdateProduct = async () => {
       try {
-          const data = products;
-          const response = await productApi.updateProductById(id, data);
+        // console.log(productId);
+          // const data = products;
+          const formData = new FormData();
+
+          formData.append("name", products.name);
+          formData.append("description", products.description);
+          formData.append("basePrice", products.basePrice);
+          formData.append("category", products.category);
+          formData.append("image", image);
+          formData.append("variations", JSON.stringify(variations));
+          
+          const response = await productApi.updateProductById(productId, formData);
           if (response.data.status === "success") {
               toastSuccess("success", "Product updated successfully");
           }
       } catch (err) {
-          toastError("error", "Failed to update product");
+          // toastError("error", "Failed to update product");
+          console.log("Error");
       }
   };
 
@@ -210,6 +222,7 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
                   hidden
                   onChange={(event) => {
                     setImage(event.target.files[0]);
+                    setPreview(URL.createObjectURL(event.target.files[0]));
                     // setImage(URL.createObjectURL(event.target.files[0]));
                   }}
                 />

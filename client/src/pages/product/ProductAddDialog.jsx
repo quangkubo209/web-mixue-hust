@@ -47,12 +47,13 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
       formData.append("basePrice", products.basePrice);
       formData.append("category", products.category);
       formData.append("image", image);
-      formData.append("variations", variations);
+      formData.append("variations", JSON.stringify(variations));
       const response = await productApi.createProduct(formData);
-      console.log("variations: ", variations);
+      // console.log("variations: ", variations);
       // const response = await productApi.createProduct({...products, image, variations});
       if (response.data.status === "success") {
-        navigate(route.PRODUCTMANAGEMENT);
+        // navigate(route.PRODUCTMANAGEMENT);
+        setVisible(false);
         toastSuccess(response.data.status);
       }
     } catch (err) {

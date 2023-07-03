@@ -7,6 +7,7 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controllers/product");
+const { updateProductById } = require("../services/product");
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router
 router
   .route("/:id")
   .get(getProductById)
-  .put(updateProduct)
+  .put(updateProductById)
   .delete(deleteProduct);
 
 module.exports = router;

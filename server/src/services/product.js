@@ -11,10 +11,9 @@ exports.getAllProducts = async () => {
 //     return await ProductModel.create(product);
 // }
 
-exports.addProduct = async(body, files) => {
+exports.addProduct = async(body, image) => {
     const {name, description, category, basePrice, variations} = body;
     // const image = files.find((img) => img.fieldname === "image");
-    const image = files;
 
     const newProduct = await ProductModel.create({
         name, 
@@ -43,7 +42,7 @@ exports.getProductById = async (id) => {
     return await ProductModel.findById(id).lean();
 }
 
-exports.updateProduct = async (id, product) => {
+exports.updateProductById = async (id, product) => {
     return await ProductModel.findByIdAndUpdate(id, product);
 }
 

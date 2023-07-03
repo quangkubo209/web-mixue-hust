@@ -1,8 +1,16 @@
 const productService = require("../services/product");
+const path = require('path');
 
 getAllProducts = async (req, res) => {
   try {
     const products = await productService.getAllProducts();
+    // console.log(products);
+    // Cập nhật đường dẫn ảnh của mỗi sản phẩm
+    await products.forEach(product => {
+      product.image = `http://localhost:4001/uploads/${product.image}`;
+      console.log(products[0].image);
+    console.log(products[0]);
+    });
     res.json({ data: products, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -20,7 +28,9 @@ getAllProducts = async (req, res) => {
 
 addProduct = async (req, res) => {
   try {
-    const product = await productService.addProduct(req.body, req.files);
+    console.log(req.file);
+    const product = await productService.addProduct(req.body, req.file.filename);
+    // console.log(req.file);
     res.json({ data: product, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -36,9 +46,9 @@ getProductById = async (req, res) => {
   }
 };
 
-updateProduct = async (req, res) => {
+updateProductById = async (req, res) => {
   try {
-    const product = await productService.updateProduct(req.params.id, req.body);
+    const product = await productService.updateProductById(req.params.productId, req.body);
     res.json({ data: product, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -68,6 +78,6 @@ module.exports = {
   getAllProducts,
   addProduct,
   getProductById,
-  updateProduct,
+  updateProductById,
   deleteProduct,
 };
