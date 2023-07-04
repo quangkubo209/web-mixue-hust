@@ -17,8 +17,12 @@ const authApi = {
     }, 
     createStaff: (data) => {
         const url = `${PREFIX}`;
-        return axiosClient.post(url, data);
-    },
+        return axiosClient.post(url, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      },
     getUserById: (id) => {
         const url = `${PREFIX}/${id}`;
         return axiosClient.get(url);

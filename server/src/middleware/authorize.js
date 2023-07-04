@@ -16,7 +16,8 @@ module.exports = async (req, res, next) => {
     //decode token
     const decoded = jwt.verify(token, config.jwt.jwt_secret);
 
-    const admin = await Admin.findById(decoded.id).select("username password");
+    const admin = await Admin.findById(decoded.id).select("username password role profileImage");
+    console.log("admin: ", admin);
     
     if (!admin) {
     console.log("no find ");

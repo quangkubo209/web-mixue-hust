@@ -15,9 +15,9 @@ export const StateProvider = ({ children }) => {
             const fetch = async () => {
                 try {
                     const response = await authApi.getUserByToken();
-                    console.log("response data : ", response.data.admin);
-                    if (response.data.success === "success") {
-                        setCurrentUser(response.data.admin);
+                    console.log("response data : ", response.data);
+                    if (response.data.status === "success") {
+                        setCurrentUser(response.data.data);
                     }
                 } catch (err) {
                     console.log(err);

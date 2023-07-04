@@ -5,6 +5,7 @@ import { Toolbar } from "primereact/toolbar";
 import authApi from "../../api/authApi";
 import { toastContext } from "../../contexts/ToastProvider";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { DialogAddStaff } from "./DialogAddStaff";
 
 const HumanResource = () => {
 
@@ -59,8 +60,8 @@ const [staffs, setStaffs] = useState([]);
 //   };
 
   const handleAddStaff = () => {
-    setSelectedProduct(null);
-    setProductDialogVisible(true);
+    // setSelectedProduct(null);
+    setVisibleStaff(true);
   };
 
   return (
@@ -87,8 +88,7 @@ const [staffs, setStaffs] = useState([]);
         </div>
       )}
 
-      {/* <ProductGrid products={products} onEdit={handleEditProduct} onDelete={handleDeleteProduct} /> */}
-      <div className="grid min-[1200px]:grid-cols-1 min-[1440px]:grid-cols-2 min-[1700px]:grid-cols-2  gap-8 ">
+      <div className="grid min-[1200px]:grid-cols-1 min-[1440px]:grid-cols-2 min-[1700px]:grid-cols-2  gap-4 ">
         <>
           {staffs.length > 0 ? (
             staffs.map((staff, index) => (
@@ -100,7 +100,7 @@ const [staffs, setStaffs] = useState([]);
                       <span className="flex items-center">
                         <div
                           className="text-red-500 cursor-pointer px-2 py-1 rounded border border-transparent hover:border-red-500 flex justify-center items-center"
-                          onClick={handleEditProduct}
+                          // onClick={handleEditProduct}
                         >
                           <i className="pi pi-pencil" />
                         </div>
@@ -137,14 +137,14 @@ const [staffs, setStaffs] = useState([]);
       </div>
 
        {visibleStaff && (
-        <ProductAddDialog
+        <DialogAddStaff
           visible={visibleStaff}
           setVisible={setVisibleStaff}
           // product={selectedProduct}
           // onSave={handleSaveProduct}
         />
       )}
-      {visibleEditDialog && (
+      {/* {visibleEditDialog && (
         <ProductEditDialog
           visible={visibleEditDialog}
           setVisible={setVisibleEditDialog}
@@ -160,7 +160,7 @@ const [staffs, setStaffs] = useState([]);
           visible={visibleDeleteDialog}
           setVisible={setVisibleDeleteDialog}
         />
-      )}
+      )} */}
     </div>
   );
 };
