@@ -54,7 +54,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
       if (response.data.status === "success") {
         // navigate(route.PRODUCTMANAGEMENT);
         setVisible(false);
-        toastSuccess(response.data.status);
+        toastSuccess("Add new product successfully");
       }
     } catch (err) {
       // toastError(err.response.data.error);

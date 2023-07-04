@@ -6,6 +6,7 @@ const route = {
     ADMINPAGE: "/admin",
     ANALYTICS: "/admin/analytics",
     ORDER: "admin/order",
+    HUMANRESOURCE: "admin/humanResource"
 };
 
 export default route;

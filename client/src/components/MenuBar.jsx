@@ -4,22 +4,22 @@ import { Avatar } from "primereact/avatar";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/baycho.jpg";
 import route from "../constants/route";
-// import { userStateContext } from "../contexts/StateProvider";
+import { userStateContext } from "../contexts/StateProvider";
 
 const VerticalMenuBar = ({ isMenuClicked }) => {
   const [selectedMenu, setSelectedMenu] = useState("dashboard");
   const navigate = useNavigate();
-  // const { currentUser, setCurrentUser } = userStateContext();
+  const { currentUser, setCurrentUser } = userStateContext();
 
   const handleLogout = () => {
-    // setCurrentUser({});
+    setCurrentUser({});
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("ADMINID");
     // localStorage.removeItem("REFRESH_TOKEN");
     navigate(route.HOME);
   };
 
-  const menuItems = [
+  const menuItems = (currentUser.role === "ADMIN")  ? [
     {
       id: "dashboard",
       label: "Dashboard",
@@ -44,7 +44,33 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
       icon: "pi pi-shopping-cart",
       url: route.ORDER,
     },
-    { id: "setting", label: "Setting", icon: "pi pi-cog", url: null },
+    { id: "humanResource", label: "Human Resource", icon: "pi pi-user", url: route.HUMANRESOURCE },
+    { id: "help", label: "Help", icon: "pi pi-question", url: null },
+  ] :  [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      icon: "pi pi-home",
+      url: route.DASHBOARD,
+    },
+    {
+      id: "manage",
+      label: "Management",
+      icon: "pi pi-database",
+      url: route.PRODUCTMANAGEMENT,
+    },
+    {
+      id: "alanalytics",
+      label: "Analytics",
+      icon: "pi pi-chart-bar",
+      url: route.ANALYTICS,
+    },
+    {
+      id: "order",
+      label: "Order",
+      icon: "pi pi-shopping-cart",
+      url: route.ORDER,
+    },
     { id: "help", label: "Help", icon: "pi pi-question", url: null },
   ];
 

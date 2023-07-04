@@ -1,15 +1,15 @@
 import { RouterProvider } from "react-router-dom";
-// import { StateProvider } from "./contexts/StateProvider";
+import { StateProvider } from "./contexts/StateProvider";
 import router from "./router";
 import ToastProvider from "./contexts/ToastProvider";
 
 function App() {
     return (
-        // <StateProvider>
+        <StateProvider>
             <ToastProvider>
                 <RouterProvider router={router} />
             </ToastProvider>
-        /* </StateProvider> */
+         </StateProvider> 
     );
 }
 

@@ -6,6 +6,7 @@ import Dashboard from "../pages/dashboard";
 import ProductManagement from "../pages/product/ProductManagement";
 import Analytics from "../pages/analytics";
 import OrderManagementPage from "../pages/order/OrderManagement";
+import HumanResource from "../pages/humanResource/HumanResource";
 const router = createBrowserRouter([
   {
     path: route.HOME,
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
       {
         path: route.ORDER,
         element: <OrderManagementPage/>
-      }
+      },
+      {
+      path: route.HUMANRESOURCE,
+      element: <HumanResource/>,
+      },
     ],
   },
 ]);

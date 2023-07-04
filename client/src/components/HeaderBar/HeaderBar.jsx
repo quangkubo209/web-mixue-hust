@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/images/baycho.jpg";
 import { Image } from "primereact/image";
 import { Avatar } from "primereact/avatar";
@@ -13,12 +13,18 @@ import { ScrollTop } from "primereact/scrolltop";
 import NotificationCard from "./NotificationCard";
 import { InputText } from "primereact/inputtext";
 import MessageCard from "./MessageCard";
+import authApi from "../../api/authApi";
+import { userStateContext } from "../../contexts/StateProvider";
+// import { userStateContext } from "../contexts/StateProvider";
 
 const SidebarSelections = ["Notification", "Message", "Profile"];
 
 function HeaderBar({ onMenuClick, isMenuClicked }) {
+
+  const { currentUser, setCurrentUser } = userStateContext();
   const options = ["All", "Unread"];
   const [value, setValue] = useState(options[0]);
+  const [user, setUser] = useState({});
   const [searchValue, setSearchValue] = useState("");
   const isBigScreen = useMediaQuery("(min-width: 1280px)");
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
@@ -29,6 +35,25 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [sidebarSelection, setSidebarSelection] = useState(0);
+
+
+  useEffect(() => {
+    console.log(currentUser);
+    const fetchProfile = async () => {
+      try {
+        const response = await authApi.getUserByToken();
+        if (response.data.status === "success") {
+          setUser(response.data.data);
+        }
+      } catch (err) {
+        console.log(err.message);
+        // console.log(err);
+        setUser([]);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
     <div
@@ -112,13 +137,14 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
             </div>
           </div>
           <div className="w-px h-full bg-black opacity-10"></div>
+          {/* avatar , name  */}
           <div className="flex justify-between space-x-2 items-center">
             <div className="flex flex-col items-end">
               <div className="xl:text-base sm:text-xs font-light text-red-500 sm:block hidden">
-                Good morning
+                {user && user.username}
               </div>
               <div className="xl:text-2xl sm:text-xs sm:block hidden ">
-                Kim nal do
+                {user && user.name}
               </div>
             </div>
             <div
@@ -129,7 +155,7 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
               }}
             >
               <img
-                src={logo}
+                src={user && user.profileImage}
                 className="h-full w-full rounded-full cursor-pointer"
               />
             </div>
@@ -235,12 +261,12 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
           >
             <div className="flex flex-col items-center">
               <Avatar
-                image={logo}
+                image={user.profileImage}
                 size="xlarge"
                 shape="circle"
                 className="bg-cover"
               />
-              <div className="text-2xl font-semibold">Kim nal do</div>
+              <div className="text-2xl font-semibold">{user.name}</div>
             </div>
           </TabPanel>
         </TabView>

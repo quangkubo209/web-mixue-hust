@@ -15,7 +15,7 @@ export  function DialogDeleteProduct({ id, name, visible, setVisible
         try {
             const response = await productApi.deleteProduct(id);
             if (response.data.status === "success") {
-                toastSuccess(response.data.status);
+                toastSuccess("Delete product seccessfully!");
                 setVisible(false);
             }
         } catch (err) {

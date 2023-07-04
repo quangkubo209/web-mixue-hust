@@ -49,16 +49,6 @@ const {
 //sử dụng midelware để xác thực quyền truy cập của admin.
 router.use(Authorize);
 
-// router
-//   .route("/")
-//   .get(getAllProducts)
-//   .post(upload.single("image"), (req, res) => {
-//     console.log(req.file);
-//     // console.log(JSON.parse(req.body.variations));
-//     variation = JSON.parse(req.body.variations);
-//     const response = await 
-//     res.json({ message: "create succesfully!!!" });
-//   });
 
 router.route("/").get(getAllProducts).post(upload.single("image"), (req, res, next) => {
   req.body.variations = JSON.parse(req.body.variations);

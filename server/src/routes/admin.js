@@ -1,32 +1,13 @@
-const router = require("express").Router();
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { loginValidation, registerValidation } = require("../utils/validation");
+const { loginValidation } = require("../utils/validation");
+const Authorize = require("../middleware/authorize");
+const adminController = require("../controllers/admin");
+const restrictedTo = require("../middleware/restrictedTo");
 
-// router.post('/register', async (req, res) => {
-//     const { error } = registerValidation(req.body);
-//     if (error) return res.status(400).send(error.details[0].message);
 
-//     const usernameExists = await Admin.findOne({ username: req.body.username });
-//     if (usernameExists) return res.status(400).send("username already exists");
-
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-//     const user = new Admin({
-//         username: req.body.username,
-//         password: hashedPassword,
-//     });
-
-//     try {
-//         await user.save();
-//         // res.send({ id: user._id });
-//         res.status(200).json({message:"create succesfully!!!", user});
-//     } catch (err) {
-//         res.status(400).send(err);
-//     }
-// });
+const router = require("express").Router();
 
 router.post("/login", async (req, res, next) => {
   try {
@@ -55,5 +36,23 @@ router.post("/login", async (req, res, next) => {
     next(err);
   }
 });
+
+
+router.use(Authorize);
+
+router.get("/token", adminController.getUserByToken);
+
+router.post(
+  "/",
+  restrictedTo("ADMIN"),
+  // uploadSingleFile("image"),
+  adminController.createStaff
+);
+router.get("/:id",  adminController.getUserById);
+router.get("/", restrictedTo("ADMIN"), adminController.getAllStaff)
+router.patch("/update-user",   adminController.updateUser);
+router.delete("/:id", restrictedTo("ADMIN"), adminController.deleteUser);
+
+
 
 module.exports = router;

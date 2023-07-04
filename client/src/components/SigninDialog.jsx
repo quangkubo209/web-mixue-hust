@@ -4,13 +4,13 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import route from "../constants/route";
 import { useState } from "react";
 // import authApi from "../../api/authApi";
-// import { userStateContext } from "../contexts/StateProvider";
+import { userStateContext } from "../contexts/StateProvider";
 import { Dialog } from "primereact/dialog";
 import authApi from "../api/authApi";
 
 export default function Signin({ visible, setVisible }) {
   const navigate = useNavigate();
-  // const { currentUser, setCurrentUser } = userStateContext();
+  const { currentUser, setCurrentUser } = userStateContext();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,11 +24,12 @@ export default function Signin({ visible, setVisible }) {
         };
         const response = await authApi.signin(data);
         if(response.data.success){
-          // setCurrentUser(response.data.admin);
+          console.log(response.data.admin);
+          setCurrentUser(response.data.admin);
           localStorage.setItem("ADMINID", response.data.admin._id);
           localStorage.setItem("TOKEN", response.data.token);
+          console.log(currentUser);
           return navigate(route.DASHBOARD);
-          // console.log(currentUser);
         }
       } catch (err) {
         console.log(err);
