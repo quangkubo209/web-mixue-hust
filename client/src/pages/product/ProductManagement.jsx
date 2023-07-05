@@ -9,6 +9,7 @@ import { Toolbar } from "primereact/toolbar";
 import productApi from "../../api/productApi";
 import { toastContext } from "../../contexts/ToastProvider";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { userStateContext } from "../../contexts/StateProvider";
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ const ProductManagement = () => {
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
   const [loading, setLoading] = useState(false);
+  const { currentUser, setCurrentUser } = userStateContext();
 
   const { toastSuccess, toastError } = toastContext();
 
@@ -76,7 +78,7 @@ const ProductManagement = () => {
 
   return (
     <div className="Card flex flex-col mx-20 my-4">
-      <Toolbar
+      {currentUser.role === "ADMIN" && <Toolbar
         className="mb-4 bg-white"
         left={
           <>
@@ -90,6 +92,7 @@ const ProductManagement = () => {
           </>
         }
       ></Toolbar>
+}
 
       {loading && (
         <div className="w-full h-[600px] flex justify-center items-center">
@@ -107,6 +110,7 @@ const ProductManagement = () => {
                   title={product.name}
                   subTitle={product.category}
                   footer={
+                    currentUser.role ==="ADMIN" ? 
                     <div className="flex justify-between text-[14px]">
                       <span className="flex items-center">
                         <div
@@ -127,6 +131,8 @@ const ProductManagement = () => {
                         </div>
                       </span>
                     </div>
+                    : 
+                    <></>
                   }
                 >
                   <div className="flex justify-center">
