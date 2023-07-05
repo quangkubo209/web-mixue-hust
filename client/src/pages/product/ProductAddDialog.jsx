@@ -9,8 +9,9 @@ import { InputTextarea } from "primereact/inputtextarea";
 import productApi from "../../api/productApi";
 import { toastContext } from "../../contexts/ToastProvider";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { Checkbox } from "primereact/checkbox";
 
-export const ProductAddDialog = ({ visible, setVisible }) => {
+export const ProductAddDialog = ({ visible, setVisible, toppingOptions, categoryOptions }) => {
   const { toastSuccess, toastError } = toastContext();
   // const [name, setName] = useState("");
   // const [category, setCategory] = useState("");
@@ -18,8 +19,11 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   // const [basePrice, setBasePrice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
-  const [variations, setVariations] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [sizeList, setSizeList] = useState([]);
   const [preview, setPreview] = useState(undefined);
+  const [topping, setTopping] = useState([]);
   const [products, setProducts] = useState({
     name: "",
     category: "",
@@ -45,9 +49,10 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
       formData.append("name", products.name);
       formData.append("description", products.description);
       formData.append("basePrice", products.basePrice);
-      formData.append("category", products.category);
+      formData.append("category", category);
       formData.append("image", image);
-      formData.append("variations", JSON.stringify(variations));
+      formData.append("toppingList", selectedOptions);
+      formData.append("sizeList", JSON.stringify(sizeList));
       const response = await productApi.createProduct(formData);
       // console.log("variations: ", variations);
       // const response = await productApi.createProduct({...products, image, variations});
@@ -63,8 +68,14 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
     setLoading(false);
   };
 
+  
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.value);
+    setCategory(event.value._id);
+};
+
   const handleSaveClick = () => {
-    console.log(variations);
+    console.log(sizeList);
     handelAddProduct();
   };
 
@@ -79,26 +90,55 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
   };
 
   const handleAddVariation = () => {
-    const newVariation = { size: "", price: null };
-    setVariations([...variations, newVariation]);
+    const newSizeList = { size: "", price: null };
+    setSizeList([...sizeList, newSizeList]);
   };
 
   const handleRemoveVariation = (index) => {
-    const updatedVariations = [...variations];
-    updatedVariations.splice(index, 1);
-    setVariations(updatedVariations);
+    const updatedSizeList = [...sizeList];
+    updatedSizeList.splice(index, 1);
+    setSizeList(updatedSizeList);
   };
 
   const handleVariationSizeChange = (index, value) => {
-    const updatedVariations = [...variations];
+    const updatedVariations = [...sizeList];
     updatedVariations[index].size = value;
-    setVariations(updatedVariations);
+    setSizeList(updatedVariations);
   };
 
   const handleVariationPriceChange = (index, value) => {
-    const updatedVariations = [...variations];
+    const updatedVariations = [...sizeList];
     updatedVariations[index].price = value;
-    setVariations(updatedVariations);
+    setSizeList(updatedVariations);
+  };
+
+  // -------------handle checkbox ------------
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  // const handleOptionChange = (e) => {
+  //   const selected = [...selectedOptions];
+  //   if (e.checked) {
+  //     selected.push(e.value);
+  //   } else {
+  //     const index = selected.indexOf(e.value);
+  //     if (index !== -1) {
+  //       selected.splice(index, 1);
+  //     }
+  //   }
+  //   setSelectedOptions(selected);
+  // };
+
+  const handleOptionChange = (e) => {
+    const { value, checked } = e.target;
+
+    if (checked) {
+      setSelectedOptions((prevSelected) => [...prevSelected, value]);
+    } else {
+      setSelectedOptions((prevSelected) =>
+        prevSelected.filter((item) => item !== value)
+      );
+    }
   };
 
   return (
@@ -142,7 +182,7 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                   className="basis-2/3 mr-8"
                 />
               </div>
-              {/* category  */} 
+              {/* category  */}
               <div className="flex items-center flex-row  mb-8">
                 <label
                   htmlFor="category"
@@ -153,9 +193,10 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                 <Dropdown
                   id="category"
                   name="category"
-                  options={["ice-cream", "beverage"]}
-                  value={products.category}
-                  onChange={handleChange}
+                  options={categoryOptions}
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  optionLabel="title"
                   placeholder="Select a category"
                   className="basis-2/3 mr-8"
                 />
@@ -194,6 +235,33 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                   className="basis-2/3 mr-8"
                 />
               </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="basePrice"
+                  className="basis-1/3 block text-gray-700 font-bold mb-2 text-left ml-4 mr-8"
+                >
+                  Select topping
+                </label>
+                <div className="">
+                  {/* ----------------------------------------------------------------------------- check box------------------------------------------------ */}
+                  {toppingOptions.map((option) => (
+                    <div key={option._id} className="ml-8 flex flex-row gap-4 ">
+                      <Checkbox
+                        inputId={option._id}
+                        value={option._id}
+                        label={option.name}
+                        onChange={handleOptionChange}
+                        checked={selectedOptions.includes(
+                        option._id
+                        )}
+                      />
+                      <label htmlFor={option.name} className="p-checkbox-label">
+                        {option.name} - {option.price}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="w-full md:w-1/2  flex flex-col py-4 mr-4 mb-4 rounded-lg ">
@@ -231,10 +299,10 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
               {/* ------------------------ add variation  */}
               <div className="mb-6">
                 <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left mr-4 ml-6 mb-8">
-                  Variations
+                  Size list
                 </label>
-                {variations &&
-                  variations.map((variation, index) => (
+                {sizeList &&
+                  sizeList.map((variation, index) => (
                     <div
                       key={index}
                       className="ml-6 flex flex-row items-center justify-start mb-4 relative"
@@ -265,12 +333,11 @@ export const ProductAddDialog = ({ visible, setVisible }) => {
                       </div>
 
                       {/* Delete Button */}
-                      <div className="cursor-pointer text-red-500 absolute right-2 " >
+                      <div className="cursor-pointer text-red-500 absolute right-2 ">
                         <span onClick={() => handleRemoveVariation(index)}>
                           <i className="pi pi-trash"></i>
                         </span>
                       </div>
-
                     </div>
                   ))}
                 <span

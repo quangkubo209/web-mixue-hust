@@ -7,7 +7,7 @@ getAllProducts = async (req, res) => {
     // console.log(products);
     // Cập nhật đường dẫn ảnh của mỗi sản phẩm
     await products.forEach(product => {
-      product.image = `http://localhost:4001/uploads/${product.image}`;
+      // product.image = `http://localhost:4001/uploads/${product.image}`;
       console.log(products[0].image);
     console.log(products[0]);
     });
@@ -28,8 +28,9 @@ getAllProducts = async (req, res) => {
 
 addProduct = async (req, res) => {
   try {
-    console.log(req.file);
+    // console.log(req.file);
     const product = await productService.addProduct(req.body, req.file.filename);
+    console.log("req.body: ", req.body);
     // console.log(req.file);
     res.json({ data: product, status: "success" });
   } catch (err) {
@@ -74,10 +75,33 @@ deleteProduct = async (req, res) => {
   }
 };
 
+getALlToping = async (req, res) => {
+  try {
+      const topings = await productService.getALlToping();
+      res.json({ data: topings, status: "success" });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+};
+
+getAllCategory = async (req, res) => {
+  try {
+      const categories = await productService.getAllCategory();
+      res.json({ data: categories, status: "success" });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+};
+
+
 module.exports = {
   getAllProducts,
   addProduct,
   getProductById,
   updateProductById,
   deleteProduct,
+  getALlToping,
+  getAllCategory
 };
+
+

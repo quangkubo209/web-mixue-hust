@@ -20,6 +20,8 @@ const ProductManagement = () => {
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
   const [loading, setLoading] = useState(false);
+  const[toppingOptions, setToppingOptions] = useState([]);
+  const[categoryOptions, setCategoryOptions] = useState([]);
   const { currentUser, setCurrentUser } = userStateContext();
 
   const { toastSuccess, toastError } = toastContext();
@@ -46,6 +48,39 @@ const ProductManagement = () => {
 
     fetchApi();
   }, [productDialogVisible, visibleDeleteDialog, visibleEditDialog]);
+
+  useEffect(() => {
+    const fetchToppingOptions = async () => {
+        try {
+            const response = await productApi.getAllToping();
+            if (response.data.status === "success") {
+                const responseTopings = response.data.data;
+                console.log("res toping: ",responseTopings);
+                setToppingOptions(responseTopings);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    fetchToppingOptions();
+}, []);
+
+useEffect(() => {
+  const fetchCategoryOptions = async () => {
+      try {
+          const response = await productApi.getAllCategory();
+          if (response.data.status === "success") {
+              const responseCategories = response.data.data;
+              setCategoryOptions(responseCategories);
+          }
+      } catch (err) {
+          console.log(err);
+      }
+  };
+
+  fetchCategoryOptions();
+}, []);
 
   const handleSaveProduct = (product) => {
     if (selectedProduct) {
@@ -108,7 +143,7 @@ const ProductManagement = () => {
               <div key={product._id} className="flex flex-col justify-between">
                 <Card
                   title={product.name}
-                  subTitle={product.category}
+                  subTitle={product.category.title}
                   footer={
                     currentUser.role ==="ADMIN" ? 
                     <div className="flex justify-between text-[14px]">
@@ -158,13 +193,13 @@ const ProductManagement = () => {
                   <div className="mt-4">
                     <div>
                       <strong>Size: </strong>
-                      {product.variations.map((item) => item.size).join(" ")}
+                      {product.sizeList.map((item) => item.sizeId.size).join(" ")}
                     </div>
                   </div>
                   <div className="mt-4">
                     <div>
                       <strong>Price: </strong>
-                      {product.variations.map((item) => new Intl.NumberFormat().format(item.price)).join(" ")}
+                      {product.sizeList.map((item) => new Intl.NumberFormat().format(item.sizeId.price)).join(" ")}
                     </div>
                   </div>
                 </Card>
@@ -182,6 +217,8 @@ const ProductManagement = () => {
         <ProductAddDialog
           visible={productDialogVisible}
           setVisible={setProductDialogVisible}
+          toppingOptions={toppingOptions}
+          categoryOptions={categoryOptions}
           // product={selectedProduct}
           // onSave={handleSaveProduct}
         />
@@ -208,3 +245,4 @@ const ProductManagement = () => {
 };
 
 export default ProductManagement;
+

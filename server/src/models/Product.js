@@ -1,40 +1,69 @@
 const { mongoose } = require("mongoose");
-const Variation = require("./Variation");
+const Topping = require("./variation/Topping")
+const Size = require("./variation/Size")
+const Category = require("./variation/Category")
 
 const productSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        minLength: 5,
+  name: {
+    type: String,
+    required: true,
+    minLength: 5,
+  },
+  description: {
+    type: String,
+  },
+  basePrice: {
+    type: Number,
+    required: true,
+    max: 999999,
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+  category: [
+    {
+      title: {
+        type: mongoose.Schema.Types.String,
+        ref: "Category",
+      },
     },
-    category: {
-        type: String,
-        required: true,
-        enum: ['ice-cream', 'beverage']
-    },
-    description: {
-        type: String,
-    },
-    basePrice: {
-        type: Number,
-        required: true,
-        max: 999999
-    },
-    // variations: [Variation.schema],
-    variations: 
-    [{
+  ],
+  sizeList: [
+    {
+      sizeId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Variation",
+        ref: "Size",
+      },
     },
-],
-    image: {
-        type: String,
-        required: true
+  ],
+  toppingList: [
+    {
+      toppingId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Topping",
+      },
     },
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    }
+  ],
+
+  image: {
+    type: String,
+    required: true,
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('Product', productSchema)
+// productSchema.pre(/^find/, function (next) {
+//   this.populate([
+//     { path: "category", select: "title",  },
+//     { path: "sizeList._id", select: "size price" },
+//     { path: "toppingList.toppingId", select: "name price" },
+
+//   ]);
+//   next();
+// });
+
+module.exports = mongoose.model("Product", productSchema);

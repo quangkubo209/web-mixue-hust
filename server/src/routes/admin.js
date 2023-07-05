@@ -59,6 +59,7 @@ router.post("/login", async (req, res, next) => {
       req.body.password,
       admin.password
     );
+    // const validPassword = req.body.password === admin.password;
     if (!validPassword) return res.status(400).send("invalid password");
 
     //sau khi đăng nhập thành công thì tạo ra 1 token.

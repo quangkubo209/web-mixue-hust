@@ -1,4 +1,5 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const Authorize = require("../middleware/authorize");
 const multer = require("multer");
 
@@ -44,6 +45,8 @@ const {
   getProductById,
   updateProductById,
   deleteProduct,
+  getALlToping,
+  getAllCategory
 } = require("../controllers/product");
 
 //sử dụng midelware để xác thực quyền truy cập của admin.
@@ -51,20 +54,25 @@ router.use(Authorize);
 
 
 router.route("/").get(getAllProducts).post(upload.single("image"), (req, res, next) => {
-  req.body.variations = JSON.parse(req.body.variations);
+  req.body.sizeList = JSON.parse(req.body.sizeList);
   // req.body.filePath = req.file.filename;
 
   next(); 
   },  addProduct);
-
+  
+router.route("/get-topping").get(getALlToping);
+router.route("/get-category").get(getAllCategory);
 router
   .route("/:id")
   .get(getProductById)
   .delete(deleteProduct);
 
 
+
+
+
 router.route("update-product/:productId").patch(upload.single("image"), (req, res, next) => {
-  req.body.variations = JSON.parse(req.body.variations);
+  req.body.sizeList = JSON.parse(req.body.sizeList);
   // req.body.filePath = req.file.filename;
 
   next(); 

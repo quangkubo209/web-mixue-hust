@@ -27,7 +27,7 @@ export default function Home() {
         <h1 className="text-4xl font-semibold text-white">
           WELCOME TO THE MANAGEMENT PAGE OF MIXUE HUST
         </h1>
-        <p className="mt-4 text-sm text-white underline">POWERED BY GROUP 19</p>
+        <p className="mt-4 text-sm text-white underline">POWERED BY GROUP 4</p>
         <div className="mt-8">
           <button
             className="px-8 py-4 text-lg font-semibold text-red-500 bg-white rounded-full hover:bg-red-100"
