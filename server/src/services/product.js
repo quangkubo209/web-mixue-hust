@@ -28,7 +28,6 @@ exports.getAllProducts = async () => {
 exports.addProduct = async (body, image) => {
   const { name, description, category, basePrice, sizeList, toppingList } =
     body;
-  // const image = files.find((img) => img.fieldname === "image");
 
   const newProduct = await ProductModel.create({
     name,
@@ -41,24 +40,27 @@ exports.addProduct = async (body, image) => {
     sizeList,
   });
 
-  // const sizeListId = [] ;
+  console.log("new product: ", newProduct);
+
+  const sizeListId = [] ;
   if (sizeList) {
     const variationData = await Promise.all(
       sizeList.map(async (size) => {
         const createdSize = await SizeSchema.create(size);
-        newProduct.sizeList.sizeId.push(createdSize._id);
+        sizeListId.push({sizeId: createdSize._id});
+        // newProduct.sizeList.push(createdSize._id);
+        // newProduct.sizeList = [...sizeListId, {sizeId: createdSize._id}];
       })
     );
   }
-  const objectIdArray = toppingList
-    .split(",")
-    .map((id) => mongoose.Types.ObjectId(id.trim()));
-  newProduct.toppingList.toppingId = objectIdArray;
+const toppingListId = [];
+  await toppingList.map(tp => {
+    // newProduct.toppingList = [...toppingListId, {toppingId:tp}];
+    toppingListId.push({toppingId: tp});
 
-  const objectCategory = mongoose.Types.ObjectId(category);
-  newProduct.category = objectCategory;
-
-  console.log("new category: ", newProduct.category);
+  } )
+  newProduct.sizeList = sizeListId;
+  newProduct.toppingList = toppingListId;
 
   await newProduct.save();
 

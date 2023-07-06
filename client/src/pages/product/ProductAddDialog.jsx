@@ -49,7 +49,7 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
       formData.append("name", products.name);
       formData.append("description", products.description);
       formData.append("basePrice", products.basePrice);
-      formData.append("category", category);
+      formData.append("category", selectedCategory);
       formData.append("image", image);
       formData.append("toppingList", selectedOptions);
       formData.append("sizeList", JSON.stringify(sizeList));
@@ -193,10 +193,10 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
                 <Dropdown
                   id="category"
                   name="category"
-                  options={categoryOptions}
+                  options={categoryOptions.map(item => item.title)}
                   value={selectedCategory}
                   onChange={handleCategoryChange}
-                  optionLabel="title"
+                  // optionLabel="title"
                   placeholder="Select a category"
                   className="basis-2/3 mr-8"
                 />

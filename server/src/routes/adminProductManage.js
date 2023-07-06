@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Authorize = require("../middleware/authorize");
 const multer = require("multer");
+const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -55,7 +56,20 @@ router.use(Authorize);
 
 router.route("/").get(getAllProducts).post(upload.single("image"), (req, res, next) => {
   req.body.sizeList = JSON.parse(req.body.sizeList);
+   var jsonString = '{"title": "' + req.body.category + '"}';
+  req.body.category = JSON.parse(jsonString);
+
+  const toppingListId = [];
   // req.body.filePath = req.file.filename;
+  const objectIdArray = req.body.toppingList
+  .split(",")
+  .map((id) => mongoose.Types.ObjectId(id.trim()));
+  console.log("array topping: ", objectIdArray);
+
+// newProduct.toppingList.toppingId = objectIdArray;
+  req.body.toppingList = objectIdArray;
+  // objectIdArray.map(ob => req.body.toppingList.toppingId = ob);
+  console.log("Req.body: ", req.body);
 
   next(); 
   },  addProduct);
