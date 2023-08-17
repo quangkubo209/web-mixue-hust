@@ -24,9 +24,9 @@ export default function Signin({ visible, setVisible }) {
         };
         const response = await authApi.signin(data);
         if(response.data.success){
-          console.log(response.data.admin);
-          setCurrentUser(response.data.admin);
-          localStorage.setItem("ADMINID", response.data.admin._id);
+          console.log(response.data.user);
+          setCurrentUser(response.data.user);
+          localStorage.setItem("USERID", response.data.user._id);
           localStorage.setItem("TOKEN", response.data.token);
           console.log(currentUser);
           return navigate(route.DASHBOARD);

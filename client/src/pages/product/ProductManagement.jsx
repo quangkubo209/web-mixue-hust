@@ -20,8 +20,8 @@ const ProductManagement = () => {
   const [productId, setProductId] = useState("");
   const [productName, setProductName] = useState("");
   const [loading, setLoading] = useState(false);
-  const[toppingOptions, setToppingOptions] = useState([]);
-  const[categoryOptions, setCategoryOptions] = useState([]);
+  const [toppingOptions, setToppingOptions] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const { currentUser, setCurrentUser } = userStateContext();
 
   const { toastSuccess, toastError } = toastContext();
@@ -51,36 +51,36 @@ const ProductManagement = () => {
 
   useEffect(() => {
     const fetchToppingOptions = async () => {
-        try {
-            const response = await productApi.getAllToping();
-            if (response.data.status === "success") {
-                const responseTopings = response.data.data;
-                console.log("res toping: ",responseTopings);
-                setToppingOptions(responseTopings);
-            }
-        } catch (err) {
-            console.log(err);
+      try {
+        const response = await productApi.getAllToping();
+        if (response.data.status === "success") {
+          const responseTopings = response.data.data;
+          console.log("res toping: ", responseTopings);
+          setToppingOptions(responseTopings);
         }
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     fetchToppingOptions();
-}, []);
+  }, []);
 
-useEffect(() => {
-  const fetchCategoryOptions = async () => {
+  useEffect(() => {
+    const fetchCategoryOptions = async () => {
       try {
-          const response = await productApi.getAllCategory();
-          if (response.data.status === "success") {
-              const responseCategories = response.data.data;
-              setCategoryOptions(responseCategories);
-          }
+        const response = await productApi.getAllCategory();
+        if (response.data.status === "success") {
+          const responseCategories = response.data.data;
+          setCategoryOptions(responseCategories);
+        }
       } catch (err) {
-          console.log(err);
+        console.log(err);
       }
-  };
+    };
 
-  fetchCategoryOptions();
-}, []);
+    fetchCategoryOptions();
+  }, []);
 
   const handleSaveProduct = (product) => {
     if (selectedProduct) {
@@ -98,6 +98,7 @@ useEffect(() => {
 
   const handleEditProduct = (product) => {
     setSelectedProduct(product);
+    setProductId(product._id);
     setVisibleEditDialog(true);
   };
 
@@ -113,21 +114,22 @@ useEffect(() => {
 
   return (
     <div className="Card flex flex-col mx-20 my-4">
-      {currentUser.role === "ADMIN" && <Toolbar
-        className="mb-4 bg-white"
-        left={
-          <>
-            <button
-              type="button"
-              className="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
-              onClick={handleAddProduct}
-            >
-              <i className="pi pi-plus mr-1"></i>Add
-            </button>
-          </>
-        }
-      ></Toolbar>
-}
+      {currentUser.role === "ADMIN" && (
+        <Toolbar
+          className="mb-4 bg-white"
+          left={
+            <>
+              <button
+                type="button"
+                className="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
+                onClick={handleAddProduct}
+              >
+                <i className="pi pi-plus mr-1"></i>Add
+              </button>
+            </>
+          }
+        ></Toolbar>
+      )}
 
       {loading && (
         <div className="w-full h-[600px] flex justify-center items-center">
@@ -142,32 +144,40 @@ useEffect(() => {
             products.map((product, index) => (
               <div key={product._id} className="flex flex-col justify-between">
                 <Card
-                  title={product.name}
+                  title={
+                    <div className="h-[50px] overflow-hidden">
+                      {product.name}
+                    </div>
+                  }
                   subTitle={product.category.title}
                   footer={
-                    currentUser.role ==="ADMIN" ? 
-                    <div className="flex justify-between text-[14px]">
-                      <span className="flex items-center">
-                        <div
-                          className="text-red-500 cursor-pointer px-2 py-1 rounded border border-transparent hover:border-red-500 flex justify-center items-center"
-                          onClick={handleEditProduct}
-                        >
-                          <i className="pi pi-pencil" />
-                        </div>
-                        <div
-                          className="text-red-500 cursor-pointer px-2 py-1 rounded border border-transparent hover:border-red-500 flex justify-center items-center"
-                          onClick={() => {
-                            setProductId(product._id);
-                            setProductName(product.name);
-                            setVisibleDeleteDialog(true);
-                          }}
-                        >
-                          <i className="pi pi-trash" />
-                        </div>
-                      </span>
-                    </div>
-                    : 
-                    <></>
+                    currentUser.role === "ADMIN" ? (
+                      <div className="flex justify-between text-[14px]">
+                        <span className="flex items-center">
+                          <div
+                            className="text-red-500 cursor-pointer px-2 py-1 rounded border border-transparent hover:border-red-500 flex justify-center items-center"
+                            onClick={() => {
+                              setProductId(product._id);
+                              setVisibleEditDialog(true);
+                            }}
+                          >
+                            <i className="pi pi-pencil" />
+                          </div>
+                          <div
+                            className="text-red-500 cursor-pointer px-2 py-1 rounded border border-transparent hover:border-red-500 flex justify-center items-center"
+                            onClick={() => {
+                              setProductId(product._id);
+                              setProductName(product.name);
+                              setVisibleDeleteDialog(true);
+                            }}
+                          >
+                            <i className="pi pi-trash" />
+                          </div>
+                        </span>
+                      </div>
+                    ) : (
+                      <></>
+                    )
                   }
                 >
                   <div className="flex justify-center">
@@ -184,22 +194,26 @@ useEffect(() => {
                       {new Intl.NumberFormat().format(product.basePrice)}
                     </div> */}
                     <span className="text-3xl font-bold text-red-700">
-                      {new Intl.NumberFormat().format(
-                        product.basePrice
-                      )}
+                      {new Intl.NumberFormat().format(product.basePrice)}
                       <span className="text-sm text-red-500 pb-2">đ</span>
                     </span>
                   </div>
                   <div className="mt-4">
                     <div>
                       <strong>Size: </strong>
-                      {product.sizeList.map((item) => item.sizeId.size).join(" ")}
+                      { product.sizeList 
+                        .map((item) => item.sizeId.size)
+                        .join(" ")}
                     </div>
                   </div>
                   <div className="mt-4">
                     <div>
                       <strong>Price: </strong>
-                      {product.sizeList.map((item) => new Intl.NumberFormat().format(item.sizeId.price)).join(" ")}
+                      {product.sizeList
+                        .map((item) =>
+                          new Intl.NumberFormat().format(item.sizeId.price)
+                        )
+                        .join(" ")}
                     </div>
                   </div>
                 </Card>
@@ -227,7 +241,8 @@ useEffect(() => {
         <ProductEditDialog
           visible={visibleEditDialog}
           setVisible={setVisibleEditDialog}
-          // product={selectedProduct}
+          toppingOptions={toppingOptions}
+          categoryOptions={categoryOptions}
           productId={productId}
         />
       )}
@@ -245,4 +260,3 @@ useEffect(() => {
 };
 
 export default ProductManagement;
-

@@ -10,13 +10,15 @@ import productApi from "../../api/productApi";
 import { toastContext } from "../../contexts/ToastProvider";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Checkbox } from "primereact/checkbox";
+import { MultiSelect } from "primereact/multiselect";
 
-export const ProductAddDialog = ({ visible, setVisible, toppingOptions, categoryOptions }) => {
+export const ProductAddDialog = ({
+  visible,
+  setVisible,
+  toppingOptions,
+  categoryOptions,
+}) => {
   const { toastSuccess, toastError } = toastContext();
-  // const [name, setName] = useState("");
-  // const [category, setCategory] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [basePrice, setBasePrice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -54,8 +56,6 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
       formData.append("toppingList", selectedOptions);
       formData.append("sizeList", JSON.stringify(sizeList));
       const response = await productApi.createProduct(formData);
-      // console.log("variations: ", variations);
-      // const response = await productApi.createProduct({...products, image, variations});
       if (response.data.status === "success") {
         // navigate(route.PRODUCTMANAGEMENT);
         setVisible(false);
@@ -68,11 +68,10 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
     setLoading(false);
   };
 
-  
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.value);
-    setCategory(event.value._id);
-};
+    // setCategory(event.value._id);
+  };
 
   const handleSaveClick = () => {
     console.log(sizeList);
@@ -190,7 +189,7 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
                 >
                   Category
                 </label>
-                <Dropdown
+                {/* <Dropdown
                   id="category"
                   name="category"
                   options={categoryOptions.map(item => item.title)}
@@ -199,6 +198,15 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
                   // optionLabel="title"
                   placeholder="Select a category"
                   className="basis-2/3 mr-8"
+                /> */}
+                <MultiSelect
+                  id="category"
+                  name="category"
+                  options={categoryOptions.map((item) => item.title)}
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  placeholder="Select categories"
+                  className="basis-2/3 mr-8 overflow-hidden"
                 />
               </div>
               <div className="flex  flex-row items-center mb-8">
@@ -245,15 +253,13 @@ export const ProductAddDialog = ({ visible, setVisible, toppingOptions, category
                 <div className="">
                   {/* ----------------------------------------------------------------------------- check box------------------------------------------------ */}
                   {toppingOptions.map((option) => (
-                    <div key={option._id} className="ml-8 flex flex-row gap-4 ">
+                    <div key={option._id} className="mt-2 ml-8 flex flex-row gap-4 ">
                       <Checkbox
                         inputId={option._id}
                         value={option._id}
                         label={option.name}
                         onChange={handleOptionChange}
-                        checked={selectedOptions.includes(
-                        option._id
-                        )}
+                        checked={selectedOptions.includes(option._id)}
                       />
                       <label htmlFor={option.name} className="p-checkbox-label">
                         {option.name} - {option.price}

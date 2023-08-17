@@ -4,9 +4,8 @@ const { registerValidation } = require("../utils/validation");
 const bcrypt = require("bcryptjs");
 
 
-exports.createStaff =  async(req, res) => {
+exports.createUser =  async(req, res) => {
     try{
-        console.log(req.file);
         // const newUser = await adminService.createStaff(req.body, req.file.filename);
         const {username, password, name, role } = req.body;
         const image = req.file.filename;
@@ -54,7 +53,7 @@ exports.createStaff =  async(req, res) => {
 //     return newStaff;
 // }
 
-exports.getAllStaff = async (req, res) => {
+exports.getAllUser = async (req, res) => {
     try {
         const users = await adminService.getAllStaff();
         await users.forEach(user => {
@@ -98,7 +97,6 @@ exports.getUserByToken = async (req, res) => {
       const userId = req.user._id; 
       const user = await adminService.getUserById(userId); 
   
-      console.log("user: ", user);
       res.json({ data: user, status: "success" });
     } catch (err) {
       res.status(500).json({ error: err.message });

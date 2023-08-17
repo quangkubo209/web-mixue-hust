@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const PREFIX = "/admin";
+const PREFIX = "/user";
 
 const authApi = {
     signin: (data) => {
@@ -27,7 +27,7 @@ const authApi = {
         const url = `${PREFIX}/${id}`;
         return axiosClient.get(url);
     },
-    getAllStaff: () => {
+    getAllUser: () => {
         const url = `${PREFIX}`;
         return axiosClient.get(url);
     },

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config/config");
-const Admin = require("../models/Admin");
+const User = require("../models/User");
 const CustomErrorHandler = require("../utils/CustomErrorHandler");
 
 module.exports = async (req, res, next) => {
@@ -16,10 +16,9 @@ module.exports = async (req, res, next) => {
     //decode token
     const decoded = jwt.verify(token, config.jwt.jwt_secret);
 
-    const admin = await Admin.findById(decoded.id).select("username password role profileImage");
-    console.log("admin: ", admin);
+    const user = await User.findById(decoded.id).select("username password role profileImage");
     
-    if (!admin) {
+    if (!user) {
     console.log("no find ");
       return next(
         new CustomErrorHandler(
@@ -29,7 +28,7 @@ module.exports = async (req, res, next) => {
       );
     }
 
-    req.user = admin;
+    req.user = user;
     next();
   } catch (err) {
     return new CustomErrorHandler(401, err.message);

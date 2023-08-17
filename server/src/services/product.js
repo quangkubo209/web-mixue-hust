@@ -40,40 +40,61 @@ exports.addProduct = async (body, image) => {
     sizeList,
   });
 
-  console.log("new product: ", newProduct);
-
   const sizeListId = [] ;
+  const categoryArray = [];
   if (sizeList) {
     const variationData = await Promise.all(
       sizeList.map(async (size) => {
         const createdSize = await SizeSchema.create(size);
         sizeListId.push({sizeId: createdSize._id});
-        // newProduct.sizeList.push(createdSize._id);
-        // newProduct.sizeList = [...sizeListId, {sizeId: createdSize._id}];
-      })
+      }
+      )
     );
   }
 const toppingListId = [];
+
   await toppingList.map(tp => {
-    // newProduct.toppingList = [...toppingListId, {toppingId:tp}];
     toppingListId.push({toppingId: tp});
 
   } )
+
+
+  console.log(categoryArray);
+
   newProduct.sizeList = sizeListId;
   newProduct.toppingList = toppingListId;
+  // newProduct.category = categoryArray;
 
   await newProduct.save();
 
   return newProduct;
 };
 
-exports.getProductById = async (id) => {
-  return await ProductModel.findById(id).lean();
+exports.updateProductById = async (id, product) => {
+  return await ProductModel.findByIdAndUpdate(id, product, 
+    {
+      new: true,
+      runValidators: true
+    });
 };
 
-exports.updateProductById = async (id, product) => {
-  return await ProductModel.findByIdAndUpdate(id, product);
+
+exports.getProductById = async (id) => {
+  return await ProductModel.findById(id).lean()
+  .populate({
+    path: "category",
+    select: "title",
+  })
+  .populate({
+    path: "sizeList.sizeId",
+    select: "size price",
+  })
+  .populate({
+    path: "toppingList.toppingId",
+    select: "name price",
+  });
 };
+
 
 exports.deleteProduct = async (id) => {
   return await ProductModel.findByIdAndDelete(id);

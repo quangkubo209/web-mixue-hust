@@ -1,52 +1,99 @@
-const router = require('express').Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { registerValidation, loginValidation } = require("../utils/validation");
-const { getAllUsers, getUserById, deleteUser, updateUser } = require('../controllers/user');
+const { loginValidation } = require("../utils/validation");
+const Authorize = require("../middleware/authorize");
+const userController = require("../controllers/user");
+const restrictedTo = require("../middleware/restrictedTo");
+const multer = require("multer");
 
-router.post('/register', async (req, res) => {
-    const { error } = registerValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
 
-    const usernameExists = await User.findOne({ username: req.body.username });
-    if (usernameExists) return res.status(400).send("username already exists");
+const router = require("express").Router();
 
-    const phoneNumberExists = await User.findOne({ phoneNumber: req.body.phoneNumber });
-    if (phoneNumberExists) return res.status(400).send("number has been used");
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    const user = new User({
-        username: req.body.username,
-        password: hashedPassword,
-        phoneNumber: req.body.phoneNumber
-    });
-
-    try {
-        await user.save();
-        // res.send({ id: user._id });
-        res.status(200).json({message:"create succesfully!!!", user});
-    } catch (err) {
-        res.status(400).send(err);
-    }
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      Date.now() +
+        "-" +
+        Math.round(Math.random() * 1e9) +
+        "." +
+        file.mimetype.split("/")[1]
+    );
+  },
+  encoding: "7bit",
 });
-router.post('/login', async (req, res) => {
+
+// const storage = multer.memoryStorage();
+
+
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter: (req, file, cb) => {
+    // reject a file
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
+});
+
+router.post("/login", async (req, res, next) => {
+  try {
     const { error } = loginValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    const user = await User.findOne({ phoneNumber: req.body.phoneNumber });
+    const user = await User.findOne({ username: req.body.username });
     if (!user) return res.status(400).send("account not found");
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    //kiểm tra password
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
     if (!validPassword) return res.status(400).send("invalid password");
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-    res.header('TOKEN', token).send(token);
+    //sau khi đăng nhập thành công thì tạo ra 1 token.
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    // res.header('TOKEN', token).send(token);
+    res
+      .status(200)
+      .json({ success: true, message: "Log in succesfully", user, token });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.route("/").get(getAllUsers);
-router.route("/:id").get(getUserById).put(updateUser).delete(deleteUser);
 
-module.exports = router
+router.use(Authorize);
+
+router.get("/token", userController.getUserByToken);
+
+// router.post(
+//   "/",
+//   restrictedTo(["ADMIN"]),
+//   uploadSingleFile("image"),
+//   adminController.createStaff
+// );
+
+
+router.route("/").post( restrictedTo("ADMIN"), upload.single("image"), userController.createUser);
+
+router.get("/:id",  userController.getUserById);
+router.get("/", restrictedTo("ADMIN"), userController.getAllUsers)
+router.patch("/update-user",   userController.updateUser);
+router.delete("/:id", restrictedTo("ADMIN"), userController.deleteUser);
+
+
+
+module.exports = router;

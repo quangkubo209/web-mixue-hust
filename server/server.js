@@ -23,16 +23,15 @@ app.use('/uploads', express.static(uploadPath));
 
 // import routers
 const userRouter = require("./src/routes/user");
-const productRouter = require("./src/routes/product");
-const adminRouter = require("./src/routes/admin");
-const adminMangeRouter = require("./src/routes/adminProductManage");
+// const productRouter = require("./src/routes/product1");
+const adminMangeRouter = require("./src/routes/product");
 const errorHandler = require("./src/middleware/errorHandler");
 
 // use routers
 app.use("/api/admin/products", adminMangeRouter);
-app.use("/api/admin", adminRouter);
+// app.use("/api/admin", adminRouter);
 app.use("/api/user", userRouter);
-app.use("/api/products", productRouter);
+// app.use("/api/products", productRouter);
 
 // middelware xử lý lỗi
 app.use(errorHandler);

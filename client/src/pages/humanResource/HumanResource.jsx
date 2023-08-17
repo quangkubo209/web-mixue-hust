@@ -20,7 +20,7 @@ const [staffs, setStaffs] = useState([]);
     const fetchApi = async () => {
       setLoading(true);
       try {
-        const response = await authApi.getAllStaff();
+        const response = await authApi.getAllUser();
         if (response.data.status === "success") {
           setStaffs(response.data.data);
         }
@@ -67,20 +67,6 @@ const [staffs, setStaffs] = useState([]);
   return (
     // <div>Human resource page</div>
     <div className="Card flex flex-col mx-20 my-4">
-      <Toolbar
-        className="mb-4 bg-white"
-        left={
-          <>
-            <button
-              type="button"
-              className="px-4 py-2 bg-red-400 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 text-white rounded-md shadow-md"
-              onClick={handleAddStaff}
-            >
-              <i className="pi pi-plus mr-1"></i>Create new staff
-            </button>
-          </>
-        }
-      ></Toolbar>
 
       {loading && (
         <div className="w-full h-[600px] flex justify-center items-center">
@@ -88,13 +74,13 @@ const [staffs, setStaffs] = useState([]);
         </div>
       )}
 
-      <div className="grid min-[1200px]:grid-cols-1 min-[1440px]:grid-cols-2 min-[1700px]:grid-cols-2  gap-4 ">
+      <div className="grid min-[1200px]:grid-cols-2 min-[1440px]:grid-cols-3 min-[1700px]:grid-cols-4  gap-4 ">
         <>
           {staffs.length > 0 ? (
             staffs.map((staff, index) => (
               <div key={staff._id} className="flex flex-col justify-between">
                 <Card
-                  title={staff.name}
+                  title={staff.fullname}
                   footer={
                     <div className="flex justify-between text-[14px]">
                       <span className="flex items-center">
@@ -120,8 +106,8 @@ const [staffs, setStaffs] = useState([]);
                 >
                   <div className="flex justify-center">
                     <img
-                      src={staff.profileImage}
-                      alt={staff.name}
+                      src={staff.avatarPath}
+                      alt={staff.username}
                       className="w-full object-contain h-[200px]"
                     />
                   </div>

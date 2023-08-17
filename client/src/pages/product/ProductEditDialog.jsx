@@ -5,68 +5,79 @@ import { Button } from "primereact/button";
 import { InputNumber } from "primereact/inputnumber";
 import { Dialog } from "primereact/dialog";
 import ProductDialogFooter from "./ProductDialogFooter";
-import {InputTextarea} from "primereact/inputtextarea";
+import { InputTextarea } from "primereact/inputtextarea";
 import productApi from "../../api/productApi";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { Checkbox } from "primereact/checkbox";
+import {MultiSelect} from "primereact/multiselect";
 
-
-export const ProductEditDialog = ({  visible, setVisible, productId }) => {
+export const ProductEditDialog = ({
+  visible,
+  setVisible,
+  productId,
+  toppingOptions,
+  categoryOptions,
+}) => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
-  const [variations, setVariations] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [sizeList, setSizeList] = useState([]);
   const [preview, setPreview] = useState(undefined);
+  const [topping, setTopping] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]); //topping
   const [products, setProducts] = useState({
     name: "",
-    category: "",
     description: "",
     basePrice: 0,
-    // variations: [],
   });
-
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      try{
+      try {
+        console.log("topping options: ", toppingOptions);
         const response = await productApi.getProductById(productId);
-        if(response.data.status === "success"){
-          
-          setProducts(response.data.data[0]);
-          setImage(response.data.data[0].image);
-          setPreview(response.data.data[0].image);
-          setVariations(response.data.data[0].variations);
+        if (response.data.status === "success") {
+          const productCurrent = response.data.data;
+          setProducts(productCurrent);
+          setSelectedCategory(productCurrent.category.map(item => item.title));
+          setImage(productCurrent.image);
+          setPreview(productCurrent.image);
+          setSizeList(productCurrent.sizeList.map(item => item.sizeId).map(item => ({price: item.price, size:item.size})));
+          setSelectedOptions(productCurrent.toppingList.map(item => item.toppingId._id));
         }
-      }
-      catch(err){
+      } catch (err) {
         console.log(err);
       }
       setLoading(false);
     };
     fetchData();
   }, [visible]);
-  
-  //update another fields of products
-    const handleUpdateProduct = async () => {
-      try {
-        // console.log(productId);
-          // const data = products;
-          const formData = new FormData();
 
-          formData.append("name", products.name);
-          formData.append("description", products.description);
-          formData.append("basePrice", products.basePrice);
-          formData.append("category", products.category);
-          formData.append("image", image);
-          formData.append("variations", JSON.stringify(variations));
-          
-          const response = await productApi.updateProductById(productId, formData);
-          if (response.data.status === "success") {
-              toastSuccess("success", "Product updated successfully");
-          }
-      } catch (err) {
-          // toastError("error", "Failed to update product");
-          console.log("Error");
+  //update another fields of products
+  const handleUpdateProduct = async () => {
+    try {
+      // console.log(productId);
+      // const data = products;
+      const formData = new FormData();
+
+      formData.append("name", products.name);
+      formData.append("description", products.description);
+      formData.append("basePrice", products.basePrice);
+      // formData.append("category", selectedCategory);
+      formData.append("image", image);
+      // formData.append("toppingList", selectedOptions);
+      // formData.append("sizeList", JSON.stringify(sizeList));
+
+      const response = await productApi.updateProductById(productId, formData);
+      if (response.data.status === "success") {
+        setVisible(false);
+        toastSuccess("success", "Product updated successfully");
       }
+    } catch (err) {
+      // toastError("error", "Failed to update product");
+      console.log("Error");
+    }
   };
 
   const handleChange = (event) => {
@@ -74,12 +85,15 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
     const value = event.target.value;
     setProducts((values) => ({ ...values, [name]: value }));
   };
-  
-  
-  
-    const handleSaveClick = () => {
-      handleUpdateProduct();
-    };
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.value);
+    // setCategory(event.value._id);
+  };
+
+  const handleSaveClick = () => {
+    handleUpdateProduct();
+  };
 
   const handleCancelClick = () => {
     setVisible(false);
@@ -87,25 +101,38 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
 
   const handleAddVariation = () => {
     const newVariation = { size: "", price: null };
-    setVariations([...variations, newVariation]);
+    setSizeList([...sizeList, newVariation]);
   };
 
   const handleRemoveVariation = (index) => {
-    const updatedVariations = [...variations];
+    const updatedVariations = [...sizeList];
     updatedVariations.splice(index, 1);
-    setVariations(updatedVariations);
+    setSizeList(updatedVariations);
   };
 
   const handleVariationSizeChange = (index, value) => {
-    const updatedVariations = [...variations];
+    const updatedVariations = [...sizeList];
     updatedVariations[index].size = value;
-    setVariations(updatedVariations);
+    setSizeList(updatedVariations);
   };
 
   const handleVariationPriceChange = (index, value) => {
-    const updatedVariations = [...variations];
+    const updatedVariations = [...sizeList];
     updatedVariations[index].price = value;
-    setVariations(updatedVariations);
+    setSizeList(updatedVariations);
+  };
+
+
+  const handleOptionChange = (e) => {
+    const { value, checked } = e.target;
+
+    if (checked) {
+      setSelectedOptions((prevSelected) => [...prevSelected, value]);
+    } else {
+      setSelectedOptions((prevSelected) =>
+        prevSelected.filter((item) => item._id !== value._id)
+      );
+    }
   };
 
   return (
@@ -157,14 +184,15 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
                 >
                   Category
                 </label>
-                <Dropdown
+                <MultiSelect
                   id="category"
                   name="category"
-                  options={["ice-cream", "beverage"]}
-                  value={products.category}
-                  onChange={handleChange}
-                  placeholder="Select a category"
-                  className="basis-2/3 mr-8"
+                  options={categoryOptions.map(item => item.title)}
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  placeholder="Select categories"
+                  // optionLabel="title"
+                  className="basis-2/3 mr-8 overflow-hidden"
                 />
               </div>
               <div className="flex  mb-8">
@@ -200,6 +228,31 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
                   onValueChange={handleChange}
                   className="basis-2/3 mr-8"
                 />
+              </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="basePrice"
+                  className="basis-1/3 block text-gray-700 font-bold mb-2 text-left ml-4 mr-8"
+                >
+                  Select topping
+                </label>
+                <div className="">
+                  {/* ----------------------------------------------------------------------------- check box------------------------------------------------ */}
+                  {toppingOptions.map((option) => (
+                    <div key={option._id} className="mt-2 ml-8 flex flex-row gap-4 ">
+                      <Checkbox
+                        inputId={option._id}
+                        value={option}
+                        label={option.name}
+                        onChange={handleOptionChange}
+                        checked={selectedOptions.map(item => item._id).includes(option._id)}
+                      />
+                      <label htmlFor={option.name} className="p-checkbox-label">
+                        {option.name} - {option.price}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -239,10 +292,11 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
               {/* ------------------------ add variation  */}
               <div className="mb-6">
                 <label className="basis-1/3 block text-gray-700 font-bold mb-2 text-left mr-4 ml-6 mb-8">
-                  Variations
+                  Size list
                 </label>
-                {variations &&
-                  variations.map((variation, index) => (
+                {sizeList &&
+                  sizeList &&
+                  sizeList.map((variation, index) => (
                     <div
                       key={index}
                       className="ml-6 flex flex-row items-center justify-start mb-4 relative"
@@ -252,7 +306,7 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
                         <Dropdown
                           value={variation.size}
                           placeholder="Size"
-                          options={["S", "M", "L"]}
+                          options={["S", "M", "L", "XL"]}
                           onChange={(e) =>
                             handleVariationSizeChange(index, e.target.value)
                           }
@@ -273,12 +327,11 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
                       </div>
 
                       {/* Delete Button */}
-                      <div className="cursor-pointer text-red-500 absolute right-2" >
+                      <div className="cursor-pointer text-red-500 absolute right-2">
                         <span onClick={() => handleRemoveVariation(index)}>
                           <i className="pi pi-trash"></i>
                         </span>
                       </div>
-
                     </div>
                   ))}
                 <span
@@ -298,6 +351,5 @@ export const ProductEditDialog = ({  visible, setVisible, productId }) => {
     </>
   );
 };
-
 
 // export footerDialog;

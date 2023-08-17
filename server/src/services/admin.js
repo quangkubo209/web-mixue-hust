@@ -1,10 +1,10 @@
-const Admin = require("../models/Admin");
+const User = require("../models/User");
 const { registerValidation } = require("../utils/validation");
 const bcrypt = require("bcryptjs");
 
 
-exports.getAllStaff = async () => {
-    return await Admin.find({role: "STAFF"});
+exports.getAllUser = async () => {
+    return await Admin.find({role: "USER"});
 }
 
 exports.getUserById = async (id) => {
