@@ -25,9 +25,17 @@ exports.getAllProducts = async () => {
 //     return await ProductModel.create(product);
 // }
 
-exports.addProduct = async (body, image) => {
-  const { name, description, category, basePrice, sizeList, toppingList } =
-    body;
+exports.addProduct = async (body) => {
+  console.log("body: ", body);
+  const {
+    name,
+    description,
+    category,
+    basePrice,
+    sizeList,
+    toppingList,
+    image,
+  } = body;
 
   const newProduct = await ProductModel.create({
     name,
@@ -40,61 +48,55 @@ exports.addProduct = async (body, image) => {
     sizeList,
   });
 
-  const sizeListId = [] ;
+  const sizeListId = [];
   const categoryArray = [];
   if (sizeList) {
     const variationData = await Promise.all(
       sizeList.map(async (size) => {
         const createdSize = await SizeSchema.create(size);
-        sizeListId.push({sizeId: createdSize._id});
-      }
-      )
+        sizeListId.push({ sizeId: createdSize._id });
+      })
     );
   }
-const toppingListId = [];
+  const toppingListId = [];
 
-  await toppingList.map(tp => {
-    toppingListId.push({toppingId: tp});
-
-  } )
-
-
-  console.log(categoryArray);
+  await toppingList.map((tp) => {
+    toppingListId.push({ toppingId: tp });
+  });
 
   newProduct.sizeList = sizeListId;
   newProduct.toppingList = toppingListId;
   // newProduct.category = categoryArray;
 
+  console.log("new product: ", newProduct);
   await newProduct.save();
 
   return newProduct;
 };
 
 exports.updateProductById = async (id, product) => {
-  return await ProductModel.findByIdAndUpdate(id, product, 
-    {
-      new: true,
-      runValidators: true
-    });
-};
-
-
-exports.getProductById = async (id) => {
-  return await ProductModel.findById(id).lean()
-  .populate({
-    path: "category",
-    select: "title",
-  })
-  .populate({
-    path: "sizeList.sizeId",
-    select: "size price",
-  })
-  .populate({
-    path: "toppingList.toppingId",
-    select: "name price",
+  return await ProductModel.findByIdAndUpdate(id, product, {
+    new: true,
+    runValidators: true,
   });
 };
 
+exports.getProductById = async (id) => {
+  return await ProductModel.findById(id)
+    .lean()
+    .populate({
+      path: "category",
+      select: "title",
+    })
+    .populate({
+      path: "sizeList.sizeId",
+      select: "size price",
+    })
+    .populate({
+      path: "toppingList.toppingId",
+      select: "name price",
+    });
+};
 
 exports.deleteProduct = async (id) => {
   return await ProductModel.findByIdAndDelete(id);

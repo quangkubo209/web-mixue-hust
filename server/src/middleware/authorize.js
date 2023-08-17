@@ -16,10 +16,12 @@ module.exports = async (req, res, next) => {
     //decode token
     const decoded = jwt.verify(token, config.jwt.jwt_secret);
 
-    const user = await User.findById(decoded.id).select("username password role profileImage");
-    
+    const user = await User.findById(decoded.id).select(
+      "username password role profileImage"
+    );
+
     if (!user) {
-    console.log("no find ");
+      console.log("no find ");
       return next(
         new CustomErrorHandler(
           401,

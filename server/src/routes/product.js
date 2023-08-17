@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Authorize = require("../middleware/authorize");
 const multer = require("multer");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -22,8 +22,6 @@ const mongoose = require('mongoose');
 // });
 
 // // const storage = multer.memoryStorage();
-
-
 
 // const upload = multer({
 //   storage: storage,
@@ -50,7 +48,7 @@ const {
   updateProductById,
   deleteProduct,
   getALlToping,
-  getAllCategory
+  getAllCategory,
 } = require("../controllers/product");
 const imgurUploadImage = require("../middleware/imgurUpload");
 const { uploadAnyFile } = require("../utils/multer");
@@ -59,58 +57,62 @@ const uploadFile = require("../middleware/uploadFile");
 //sử dụng midelware để xác thực quyền truy cập của admin.
 router.use(Authorize);
 
-
-router.route("/").get(getAllProducts).post( imgurUploadImage, (req, res, next) => {
-  req.body.sizeList = JSON.parse(req.body.sizeList);
-  const CategoryTitles = [];
-  req.body.category.split(",").map((cate)=> {
-       var jsonString = '{"title": "' + cate + '"}';
+router
+  .route("/")
+  .get(getAllProducts)
+  .post(
+    upload.single("image"),
+    imgurUploadImage,
+    (req, res, next) => {
+      console.log("req.body: ", req.body.sizeList);
+      req.body.sizeList = JSON.parse(req.body.sizeList);
+      const CategoryTitles = [];
+      req.body.category.split(",").map((cate) => {
+        var jsonString = '{"title": "' + cate + '"}';
         CategoryTitles.push(JSON.parse(jsonString));
-  }) 
-  req.body.category = CategoryTitles;
+      });
+      req.body.category = CategoryTitles;
 
-  const toppingListId = [];
-  // req.body.filePath = req.file.filename;
-  const objectIdArray = req.body.toppingList
-  .split(",")
-  .map((id) => mongoose.Types.ObjectId(id.trim()));
+      const toppingListId = [];
+      // req.body.filePath = req.file.filename;
+      const objectIdArray = req.body.toppingList
+        .split(",")
+        .map((id) => mongoose.Types.ObjectId(id.trim()));
 
-// newProduct.toppingList.toppingId = objectIdArray;
-  req.body.toppingList = objectIdArray;
+      // newProduct.toppingList.toppingId = objectIdArray;
+      req.body.toppingList = objectIdArray;
 
-  next(); 
-  },  addProduct);
-  
+      next();
+    },
+    addProduct
+  );
+
 router.route("/get-topping").get(getALlToping);
 router.route("/get-category").get(getAllCategory);
-router
-  .route("/:id")
-  .get(getProductById)
-  .delete(deleteProduct);
+router.route("/:id").get(getProductById).delete(deleteProduct);
 
+router.route("/update-product/:productId").patch(
+  upload.single("image"),
+  (req, res, next) => {
+    // req.body.sizeList = JSON.parse(req.body.sizeList);
+    // const CategoryTitles = [];
+    // req.body.category.split(",").map((cate)=> {
+    //      var jsonString = '{"title": "' + cate + '"}';
+    //       CategoryTitles.push(JSON.parse(jsonString));
+    // })
+    // req.body.category = CategoryTitles;
 
+    // const toppingListId = [];
+    // // req.body.filePath = req.file.filename;
+    // const objectIdArray = req.body.toppingList
+    // .split(",")
+    // .map((id) => mongoose.Types.ObjectId(id.trim()));
 
+    // req.body.toppingList = objectIdArray;
 
-
-router.route("/update-product/:productId").patch(upload.single("image"), (req, res, next) => {
-  // req.body.sizeList = JSON.parse(req.body.sizeList);
-  // const CategoryTitles = [];
-  // req.body.category.split(",").map((cate)=> {
-  //      var jsonString = '{"title": "' + cate + '"}';
-  //       CategoryTitles.push(JSON.parse(jsonString));
-  // }) 
-  // req.body.category = CategoryTitles;
-
-  // const toppingListId = [];
-  // // req.body.filePath = req.file.filename;
-  // const objectIdArray = req.body.toppingList
-  // .split(",")
-  // .map((id) => mongoose.Types.ObjectId(id.trim()));
-
-  // req.body.toppingList = objectIdArray;
-
-
-  next(); 
-  },updateProductById);
+    next();
+  },
+  updateProductById
+);
 
 module.exports = router;

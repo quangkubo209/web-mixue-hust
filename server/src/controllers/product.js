@@ -1,5 +1,5 @@
 const productService = require("../services/product");
-const path = require('path');
+const path = require("path");
 
 getAllProducts = async (req, res) => {
   try {
@@ -26,11 +26,10 @@ getAllProducts = async (req, res) => {
 
 addProduct = async (req, res) => {
   try {
-    console.log(req.body.category);
-    const product = await productService.addProduct(req.body, req.file.filename);
+    const product = await productService.addProduct(req.body);
     res.json({ data: product, status: "success" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    throw err;
   }
 };
 
@@ -46,7 +45,10 @@ getProductById = async (req, res) => {
 
 updateProductById = async (req, res) => {
   try {
-    const product = await productService.updateProductById(req.params.productId, req.body);
+    const product = await productService.updateProductById(
+      req.params.productId,
+      req.body
+    );
     res.json({ data: product, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -74,22 +76,21 @@ deleteProduct = async (req, res) => {
 
 getALlToping = async (req, res) => {
   try {
-      const topings = await productService.getALlToping();
-      res.json({ data: topings, status: "success" });
+    const topings = await productService.getALlToping();
+    res.json({ data: topings, status: "success" });
   } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
 getAllCategory = async (req, res) => {
   try {
-      const categories = await productService.getAllCategory();
-      res.json({ data: categories, status: "success" });
+    const categories = await productService.getAllCategory();
+    res.json({ data: categories, status: "success" });
   } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
-
 
 module.exports = {
   getAllProducts,
@@ -98,7 +99,5 @@ module.exports = {
   updateProductById,
   deleteProduct,
   getALlToping,
-  getAllCategory
+  getAllCategory,
 };
-
-

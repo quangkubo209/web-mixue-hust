@@ -1,5 +1,5 @@
 const express = require("express");
-const path = require('path');
+const path = require("path");
 const cors = require("cors");
 require("dotenv").config();
 const app = express();
@@ -18,15 +18,14 @@ app.use(
 // app.use('/images', express.static(imagePath));
 
 // Cấu hình express.static để phục vụ tệp tĩnh từ thư mục uploads
-const uploadPath = 'C:/Users/Admin/OneDrive - Hanoi University of Science and Technology/Documents/Project-softwareEngineer/web-mixue-hust/server/uploads';
-app.use('/uploads', express.static(uploadPath));
-
 // import routers
 const userRouter = require("./src/routes/user");
 // const productRouter = require("./src/routes/product1");
 const adminMangeRouter = require("./src/routes/product");
 const errorHandler = require("./src/middleware/errorHandler");
+const morgan = require("morgan");
 
+app.use(morgan("dev"));
 // use routers
 app.use("/api/admin/products", adminMangeRouter);
 // app.use("/api/admin", adminRouter);
