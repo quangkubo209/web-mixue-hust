@@ -6,9 +6,9 @@ getAllProducts = async (req, res) => {
     const products = await productService.getAllProducts();
     // console.log(products);
     // Cập nhật đường dẫn ảnh của mỗi sản phẩm
-    await products.forEach(product => {
-      product.image = `http://localhost:4001/uploads/${product.image}`;
-    });
+    // await products.forEach(product => {
+    //   product.image = `http://localhost:4001/uploads/${product.image}`;
+    // });
     res.json({ data: products, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -37,7 +37,7 @@ addProduct = async (req, res) => {
 getProductById = async (req, res) => {
   try {
     const product = await productService.getProductById(req.params.id);
-    product.image = `http://localhost:4001/uploads/${product.image}`;
+    // product.image = `http://localhost:4001/uploads/${product.image}`;
     res.json({ data: product, status: "success" });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -76,7 +76,7 @@ export default function Signin({ visible, setVisible }) {
           // to={route.FORGOTPASSWORD}
           className="text-sm block text-blue-700 mt-2 "
         >
-  <span class="hover:underline">Forgot Password</span>
+  {/* <span class="hover:underline">Forgot Password</span> */}
         </Link>
         </div>
       </div>

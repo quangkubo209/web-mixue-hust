@@ -156,7 +156,8 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
             >
               <img
                 // src={user && user.profileImage}
-                src = {user && `http://localhost:4001/uploads/${user.profileImage}`}
+                // src = {user && `http://localhost:4001/uploads/${user.profileImage}`}
+                src= {user && user.avatarPath}
                 className="h-full w-full rounded-full cursor-pointer"
               />
             </div>
@@ -262,7 +263,8 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
           >
             <div className="flex flex-col items-center">
               <Avatar
-                image={ user && `http://localhost:4001/uploads/${user.profileImage}`}
+                // image={ user && `http://localhost:4001/uploads/${user.profileImage}`}
+                image={ user && user.avatarPath}
                 size="xlarge"
                 shape="circle"
                 className="bg-cover"

@@ -44,7 +44,7 @@ export const ProductEditDialog = ({
           setImage(productCurrent.image);
           setPreview(productCurrent.image);
           setSizeList(productCurrent.sizeList.map(item => item.sizeId).map(item => ({price: item.price, size:item.size})));
-          setSelectedOptions(productCurrent.toppingList.map(item => item.toppingId._id));
+          setSelectedOptions(productCurrent.toppingList.map(item => ({_id: item.toppingId._id, name: item.toppingId.name})));
         }
       } catch (err) {
         console.log(err);
