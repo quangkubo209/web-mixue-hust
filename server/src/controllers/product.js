@@ -1,5 +1,6 @@
 const productService = require("../services/product");
 const path = require("path");
+const CustomErrorHandler = require("../utils/CustomErrorHandler");
 
 getAllProducts = async (req, res) => {
   try {
@@ -24,22 +25,38 @@ getAllProducts = async (req, res) => {
 //     }
 // }
 
-addProduct = async (req, res) => {
+addProduct = async (req, res, next) => {
   try {
-    const product = await productService.addProduct(req.body);
-    res.json({ data: product, status: "success" });
+    const {type, message, statusCode, product} = await productService.addProduct(req.body);
+    if (type === "ERROR")
+      return next(new CustomErrorHandler(statusCode, message));
+    // res.json({ data: product, status: "success" });
+    res.status(statusCode).json({
+      type,
+      message,
+      product,
+  });
   } catch (err) {
-    throw err;
+    // res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-getProductById = async (req, res) => {
+getProductById = async (req, res, next) => {
   try {
-    const product = await productService.getProductById(req.params.id);
+    const {type, message,statusCode,  product} = await productService.getProductById(req.params.id);
     // product.image = `http://localhost:4001/uploads/${product.image}`;
-    res.json({ data: product, status: "success" });
+    if (type === "ERROR")
+    return next(new CustomErrorHandler(statusCode, message));
+  // res.json({ data: product, status: "success" });
+  res.status(statusCode).json({
+    type,
+    message,
+    product,
+});
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 

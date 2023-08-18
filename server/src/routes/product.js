@@ -66,21 +66,27 @@ router
     (req, res, next) => {
       console.log("req.body: ", req.body.sizeList);
       req.body.sizeList = JSON.parse(req.body.sizeList);
-      const CategoryTitles = [];
-      req.body.category.split(",").map((cate) => {
+      var CategoryTitles = [];
+      if(req.body.category[0].title != 'null'){      req.body.category.split(",").map((cate) => {
         var jsonString = '{"title": "' + cate + '"}';
         CategoryTitles.push(JSON.parse(jsonString));
       });
-      req.body.category = CategoryTitles;
+      req.body.category = CategoryTitles;}
 
       const toppingListId = [];
+      console.log("req.body.toppingList", req.body.toppingList);
       // req.body.filePath = req.file.filename;
-      const objectIdArray = req.body.toppingList
+      if(req.body.toppingList){
+        console.log("Vao duoc roi");
+        const objectIdArray = req.body.toppingList
         .split(",")
         .map((id) => mongoose.Types.ObjectId(id.trim()));
 
       // newProduct.toppingList.toppingId = objectIdArray;
       req.body.toppingList = objectIdArray;
+      }
+
+      
 
       next();
     },

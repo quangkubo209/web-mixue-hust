@@ -22,7 +22,7 @@ export const ProductAddDialog = ({
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(undefined);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [category, setCategory] = useState([]);
   const [sizeList, setSizeList] = useState([]);
   const [preview, setPreview] = useState(undefined);
   const [topping, setTopping] = useState([]);
@@ -56,13 +56,13 @@ export const ProductAddDialog = ({
       formData.append("toppingList", selectedOptions);
       formData.append("sizeList", JSON.stringify(sizeList));
       const response = await productApi.createProduct(formData);
-      if (response.data.status === "success") {
+      if (response.data.type === "SUCCESS") {
         // navigate(route.PRODUCTMANAGEMENT);
         setVisible(false);
         toastSuccess("Add new product successfully");
       }
     } catch (err) {
-      // toastError(err.response.data.error);
+      toastError(err.response.data.message);
       console.log(err);
     }
     setLoading(false);
@@ -140,6 +140,8 @@ export const ProductAddDialog = ({
     }
   };
 
+
+
   return (
     <>
       <Dialog
@@ -166,6 +168,12 @@ export const ProductAddDialog = ({
             {/* name  */}
             <div className="w-full md:w-1/2  mt-4 ">
               <div className="flex items-center flex-row   mb-8">
+              
+                           {/* <div
+                className={`flex items-center flex-row mb-8 ${
+                  fieldWarnings.name ? "text-red-500" : ""
+                }`}
+              > */}
                 <label
                   htmlFor="name"
                   className=" basis-1/3 block text-gray-700 font-bold mb-2 text-right mr-8 "
@@ -180,6 +188,7 @@ export const ProductAddDialog = ({
                   onChange={handleChange}
                   className="basis-2/3 mr-8"
                 />
+
               </div>
               {/* category  */}
               <div className="flex items-center flex-row  mb-8">
@@ -259,7 +268,7 @@ export const ProductAddDialog = ({
                         value={option._id}
                         label={option.name}
                         onChange={handleOptionChange}
-                        checked={selectedOptions.includes(option._id)}
+                        checked={ selectedOptions.includes(option._id)}
                       />
                       <label htmlFor={option.name} className="p-checkbox-label">
                         {option.name} - {option.price}
@@ -318,7 +327,7 @@ export const ProductAddDialog = ({
                         <Dropdown
                           value={variation.size}
                           placeholder="Size"
-                          options={["S", "M", "L"]}
+                          options={["L", "XL"]}
                           onChange={(e) =>
                             handleVariationSizeChange(index, e.target.value)
                           }
