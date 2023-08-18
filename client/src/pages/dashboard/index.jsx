@@ -10,12 +10,11 @@ import {
   OrdersSVG,
   CustomersSVG,
   IncomesSVG,
-  StarSVG,
+  UserSVG,
 } from "./IconSVG";
 import DailyTrendingMenu from "./DailyTrendingMenu";
-import RevenueChart from "./BarChart";
-import PieChart from "./PieChart";
-import LineChart from "./LineChart";
+import CustomerChart from "./CustomerChart";
+import OrderChart from "./OrderChart";
 
 export default function Dashboard() {
   return (
@@ -25,23 +24,22 @@ export default function Dashboard() {
         backgroundColor: "#f7f6f6",
       }}
     >
-      <div className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 xl:gap-4 gap-8 mb-5">
-        <AmountCard name="Menus" amount={56} icon={MenusSVG} />
-        <AmountCard name="Orders" amount={56} icon={OrdersSVG} />
-        <AmountCard name="Avg. Customer Rating" amount={"1.0"} icon={StarSVG} />
-        <AmountCard name="Revenues" amount={4343.4} icon={IncomesSVG} />
+      <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 xl:gap-4 gap-8 mb-5">
+        <AmountCard name="Total products" amount={56} icon={MenusSVG} />
+        <AmountCard name="Total orders" amount={56} icon={OrdersSVG} />
+        <AmountCard name="Total users" amount={36} icon={UserSVG} />
       </div>
       <div className="grid xl:grid-cols-2 grid-cols-1 xl:gap-4 gap-8 mb-5">
-        <RevenueChart />
-        <LineChart />
+        <CustomerChart />
+        <OrderChart />
       </div>
       <div className="grid xl:grid-cols-3 grid-cols-1 xl:gap-4 gap-8 mb-5">
-        <div className="xl:col-start-1 xl:col-end-3 md:w-full">
+        <div className="xl:col-start-1 xl:col-end-4 md:w-full">
           <RecentOrderRequest />
         </div>
-        <div className="xl:col-start-3 xl:col-end-4 w-full">
+        {/* <div className="xl:col-start-3 xl:col-end-4 w-full">
           <DailyTrendingMenu />
-        </div>
+        </div> */}
       </div>
     </div>
   );

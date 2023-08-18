@@ -4,13 +4,7 @@ import { useState, useLayoutEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
 
-function BarChart() {
-  const [orderLabelFilter, setOrderLabelFilter] = useState("Newest");
-  const orderLabelItems = [
-    { label: "3 Recent Months", value: "3" },
-    { label: "6 Recnet Months", value: "6" },
-    { label: "This year", value: "12" },
-  ];
+function OrderChart() {
 
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
@@ -26,15 +20,9 @@ function BarChart() {
       labels: ["January", "February", "March", "April"],
       datasets: [
         {
-          label: "Old Customer",
+          label: "Placed Orders",
           backgroundColor: documentStyle.getPropertyValue("--blue-500"),
           borderColor: documentStyle.getPropertyValue("--blue-500"),
-          data: [65, 59, 80, 81, 56, 55, 40, 60],
-        },
-        {
-          label: "New Customer",
-          backgroundColor: documentStyle.getPropertyValue("--pink-500"),
-          borderColor: documentStyle.getPropertyValue("--pink-500"),
           data: [28, 48, 40, 19, 86, 27, 90, 50],
         },
       ],
@@ -89,14 +77,8 @@ text-2xl font-semibold
             marginBottom: "17px",
           }}
         >
-          Customer
+          Orders
         </div>
-        <Dropdown
-          value={orderLabelFilter}
-          options={orderLabelItems}
-          onChange={(e) => setOrderLabelFilter(e.value)}
-          placeholder="3 Recent Months"
-        />
       </div>
       <div className="mb-4 flex-grow">
         {Object.keys(chartData).length != 0 && (
@@ -107,4 +89,4 @@ text-2xl font-semibold
   );
 }
 
-export default BarChart;
+export default OrderChart;

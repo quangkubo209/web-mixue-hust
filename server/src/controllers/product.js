@@ -92,6 +92,15 @@ getAllCategory = async (req, res) => {
   }
 };
 
+countProduct = async (req, res) => {
+  try {
+    const count = await productService.countProduct();
+    res.json({ data: count, status: "success" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getAllProducts,
   addProduct,
@@ -100,4 +109,5 @@ module.exports = {
   deleteProduct,
   getALlToping,
   getAllCategory,
+  countProduct,
 };

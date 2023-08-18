@@ -109,3 +109,7 @@ exports.getALlToping = async () => {
 exports.getAllCategory = async () => {
   return await CategoryModel.find({});
 };
+
+exports.countProduct = async () => {
+  return await ProductModel.countDocuments();
+};

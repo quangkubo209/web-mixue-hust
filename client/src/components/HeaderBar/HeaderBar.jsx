@@ -17,7 +17,7 @@ import authApi from "../../api/authApi";
 import { userStateContext } from "../../contexts/StateProvider";
 // import { userStateContext } from "../contexts/StateProvider";
 
-const SidebarSelections = ["Notification", "Message", "Profile"];
+const SidebarSelections = ["Notification", "Profile"];
 
 function HeaderBar({ onMenuClick, isMenuClicked }) {
 
@@ -106,28 +106,6 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
               </div>
               <i
                 className="pi pi-bell"
-                style={
-                  isBigScreen
-                    ? { fontSize: "1.875rem" }
-                    : { fontSize: "1.5rem" }
-                }
-              ></i>
-            </div>
-            <div
-              className=" relative text-inherit xl:p-4 p-3 rounded-full flex justify-center items-center cursor-pointer"
-              style={{
-                backgroundColor: "#f7f6f6",
-              }}
-              onClick={() => {
-                setIsSidebarVisible(true);
-                setSidebarSelection(1);
-              }}
-            >
-              <div className="absolute bottom-0 -right-2 xl:h-8 xl:w-8 h-6 w-6  xl:text-sm text-xs rounded-full bg-red-400 flex justify-center items-center text-white">
-                {101 > 100 ? "99+" : "101"}
-              </div>
-              <i
-                className="pi pi-send"
                 style={
                   isBigScreen
                     ? { fontSize: "1.875rem" }
@@ -246,14 +224,6 @@ function HeaderBar({ onMenuClick, isMenuClicked }) {
                     onChange={(e) => setSearchValue(e.target.value)}
                   />
                 </span>
-              </div>
-
-              <div className="mt-4 flex flex-col">
-                {Array(12)
-                  .fill(0)
-                  .map((item, index) => (
-                    <MessageCard key={index}/>
-                  ))}
               </div>
             </div>
           </TabPanel>

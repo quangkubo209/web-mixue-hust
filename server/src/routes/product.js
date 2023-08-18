@@ -49,6 +49,7 @@ const {
   deleteProduct,
   getALlToping,
   getAllCategory,
+  countProduct,
 } = require("../controllers/product");
 const imgurUploadImage = require("../middleware/imgurUpload");
 const { uploadAnyFile } = require("../utils/multer");
@@ -114,5 +115,5 @@ router.route("/update-product/:productId").patch(
   },
   updateProductById
 );
-
+router.route("/count", countProduct);
 module.exports = router;

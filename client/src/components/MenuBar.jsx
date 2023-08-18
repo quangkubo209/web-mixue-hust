@@ -35,12 +35,12 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
             icon: "pi pi-database",
             url: route.PRODUCTMANAGEMENT,
           },
-          {
-            id: "alanalytics",
-            label: "Analytics",
-            icon: "pi pi-chart-bar",
-            url: route.ANALYTICS,
-          },
+          // {
+          //   id: "alanalytics",
+          //   label: "Analytics",
+          //   icon: "pi pi-chart-bar",
+          //   url: route.ANALYTICS,
+          // },
           {
             id: "order",
             label: "Order",
@@ -53,7 +53,7 @@ const VerticalMenuBar = ({ isMenuClicked }) => {
             icon: "pi pi-user",
             url: route.HUMANRESOURCE,
           },
-          { id: "help", label: "Help", icon: "pi pi-question", url: null },
+          // { id: "help", label: "Help", icon: "pi pi-question", url: null },
         ]
       : [
           {

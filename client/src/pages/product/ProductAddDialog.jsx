@@ -55,6 +55,10 @@ export const ProductAddDialog = ({
       formData.append("image", image);
       formData.append("toppingList", selectedOptions);
       formData.append("sizeList", JSON.stringify(sizeList));
+
+      formData.forEach((value, key) => {
+        console.log(key + " " + value);
+      });
       const response = await productApi.createProduct(formData);
       if (response.data.status === "success") {
         // navigate(route.PRODUCTMANAGEMENT);

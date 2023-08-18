@@ -91,9 +91,9 @@ router.route("/").post( restrictedTo("ADMIN"), upload.single("image"), userContr
 
 router.get("/:id",  userController.getUserById);
 router.get("/", restrictedTo("ADMIN"), userController.getAllUsers)
-router.patch("/update-user",   userController.updateUser);
+router.patch("/:id",   userController.updateUser);
 router.delete("/:id", restrictedTo("ADMIN"), userController.deleteUser);
-
+router.get("/count", userController.countUser);
 
 
 module.exports = router;
