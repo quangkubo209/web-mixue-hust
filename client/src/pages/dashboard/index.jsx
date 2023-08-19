@@ -1,7 +1,7 @@
 import { Avatar } from "primereact/avatar";
 import DashboardCard from "./DashboardCard";
 import { Dropdown } from "primereact/dropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../../assets/images/baycho.jpg";
 import RecentOrderRequest from "./RecentOrderRequest";
 import AmountCard from "./AmountCard";
@@ -15,8 +15,22 @@ import {
 import DailyTrendingMenu from "./DailyTrendingMenu";
 import CustomerChart from "./CustomerChart";
 import OrderChart from "./OrderChart";
-
+import statApi from "../../api/statApi";
+import axios from "axios";
 export default function Dashboard() {
+
+  let users;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await statApi.countSome();
+        console.log("response", response);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div
       className="p-5 w-full h-full"

@@ -37,8 +37,8 @@ export const ProductEditDialog = ({
       try {
         console.log("topping options: ", toppingOptions);
         const response = await productApi.getProductById(productId);
-        if (response.data.status === "success") {
-          const productCurrent = response.data.data;
+        if (response.data.type === "SUCCESS") {
+          const productCurrent = response.data.product;
           setProducts(productCurrent);
           setSelectedCategory(productCurrent.category.map(item => item.title));
           setImage(productCurrent.image);

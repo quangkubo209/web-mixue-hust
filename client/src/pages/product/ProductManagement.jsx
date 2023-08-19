@@ -201,16 +201,17 @@ const ProductManagement = () => {
                   <div className="mt-4">
                     <div>
                       <strong>Size: </strong>
-                      { product.sizeList 
-                        .map((item) => item.sizeId.size)
+                      { product.sizeList.length > 0 && product.sizeList
+                        .map((item) => item.sizeId && item.sizeId.size)
                         .join(" ")}
                     </div>
                   </div>
                   <div className="mt-4">
                     <div>
                       <strong>Price: </strong>
-                      {product.sizeList
+                      {product.sizeList.length >= 1 && product.sizeList
                         .map((item) =>
+                        item.sizeId && 
                           new Intl.NumberFormat().format(item.sizeId.price)
                         )
                         .join(" ")}

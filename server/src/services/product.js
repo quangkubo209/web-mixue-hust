@@ -37,16 +37,65 @@ exports.addProduct = async (body) => {
     image,
   } = body;
 
-  const newProduct = await ProductModel.create({
-    name,
-    description,
-    category,
-    basePrice,
-    image,
-    sizeList,
-    toppingList,
-    sizeList,
-  });
+  console.log("basePrice: ", basePrice);
+
+
+  if (!name)
+    return {
+        type: "ERROR",
+        message: "name field is required",
+        statusCode: 400,
+    };
+
+  if (basePrice === '0')
+    return {
+        type: "ERROR",
+        message: "basePrice field is required",
+        statusCode: 400,
+    };
+
+  if (image === 'undefined')
+    return {
+        type: "ERROR",
+        message: "image field is required",
+        statusCode: 400,
+    };
+
+  var newProduct = {};
+  if(toppingList){
+    newProduct = await ProductModel.create({
+      name,
+      description,
+      category,
+      basePrice,
+      image,
+      sizeList,
+      toppingList,
+      sizeList,
+    });
+  }
+  else {
+     newProduct = await ProductModel.create({
+      name,
+      description,
+      category,
+      basePrice,
+      image,
+      sizeList,
+      // toppingList,
+      sizeList,
+    });
+  }
+  // const newProduct = await ProductModel.create({
+  //   name,
+  //   description,
+  //   category,
+  //   basePrice,
+  //   image,
+  //   sizeList,
+  //   toppingList,
+  //   sizeList,
+  // });
 
   const sizeListId = [];
   const categoryArray = [];
@@ -58,20 +107,28 @@ exports.addProduct = async (body) => {
       })
     );
   }
-  const toppingListId = [];
+  if(toppingList){ 
+    console.log("vao duoc nua roi");
+     const toppingListId = [];
 
-  await toppingList.map((tp) => {
-    toppingListId.push({ toppingId: tp });
-  });
+    await toppingList.map((tp) => {
+      toppingListId.push({ toppingId: tp });
+    });
+  
+    newProduct.toppingList = toppingListId;}
 
   newProduct.sizeList = sizeListId;
-  newProduct.toppingList = toppingListId;
   // newProduct.category = categoryArray;
 
   console.log("new product: ", newProduct);
   await newProduct.save();
 
-  return newProduct;
+  return {
+    type: "SUCCESS",
+    message: "Add product successfully!",
+    statusCode: 200,
+    product: newProduct,
+};
 };
 
 exports.updateProductById = async (id, product) => {
@@ -82,7 +139,7 @@ exports.updateProductById = async (id, product) => {
 };
 
 exports.getProductById = async (id) => {
-  return await ProductModel.findById(id)
+  const productGetById = await  ProductModel.findById(id)
     .lean()
     .populate({
       path: "category",
@@ -96,7 +153,23 @@ exports.getProductById = async (id) => {
       path: "toppingList.toppingId",
       select: "name price",
     });
+
+    if (!productGetById)
+    return {
+        type: "ERROR",
+        message: "No product found!",
+        statusCode: 404,
+    };
+
+    return {
+      product : productGetById,
+      type: "SUCCESS", 
+      statusCode: 200,
+      message : " Found ",
+
+    }
 };
+
 
 exports.deleteProduct = async (id) => {
   return await ProductModel.findByIdAndDelete(id);
