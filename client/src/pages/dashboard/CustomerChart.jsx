@@ -3,9 +3,9 @@ import DashboardCard from "./DashboardCard";
 import { useState, useLayoutEffect } from "react";
 import { Chart } from "primereact/chart";
 import { Dropdown } from "primereact/dropdown";
+import userApi from "../../api/userApi";
 
 function CustomerChart() {
-
   const [chartData, setChartData] = useState({});
   const [chartOptions, setChartOptions] = useState({});
 
@@ -16,6 +16,14 @@ function CustomerChart() {
       "--text-color-secondary"
     );
     const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
+
+    const fetchUsers = async () => {
+      const res = await userApi.getAllUsers();
+      // console.log(res);
+    };
+
+    fetchUsers();
+
     const data = {
       labels: ["January", "February", "March", "April"],
       datasets: [
@@ -82,7 +90,12 @@ text-2xl font-semibold
       </div>
       <div className="mb-4 flex-grow">
         {Object.keys(chartData).length != 0 && (
-          <Chart type="bar" data={chartData} options={chartOptions} className="h-full"/>
+          <Chart
+            type="bar"
+            data={chartData}
+            options={chartOptions}
+            className="h-full"
+          />
         )}
       </div>
     </DashboardCard>

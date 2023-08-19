@@ -24,6 +24,10 @@ const userApi = {
       },
     });
   },
+  countSome: () => {
+    const url = `${PREFIX}/count`;
+    return axiosClient.get(url);
+  },
 };
 
 export default userApi;

@@ -6,11 +6,7 @@ const statApi = {
   countSome: () => {
     const url = `${PREFIX}/count`;
     console.log("url", url);
-    return axiosClient.get(url, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return axiosClient.get(url);
   },
 };
 

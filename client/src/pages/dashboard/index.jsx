@@ -17,19 +17,25 @@ import CustomerChart from "./CustomerChart";
 import OrderChart from "./OrderChart";
 import statApi from "../../api/statApi";
 import axios from "axios";
+import userApi from "../../api/userApi";
 export default function Dashboard() {
-
-  let users;
+  let initData = {
+    productNum: -1,
+    orderNum: -1,
+    userNum: -1,
+  };
+  const [data, setData] = useState(initData);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await statApi.countSome();
-        console.log("response", response);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
+  const fetchData = async () => {
+    try {
+      const response = await userApi.countSome();
+      console.log("response", response.data.data);
+      setData(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  fetchData();
   }, []);
   return (
     <div
@@ -39,9 +45,17 @@ export default function Dashboard() {
       }}
     >
       <div className="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 xl:gap-4 gap-8 mb-5">
-        <AmountCard name="Total products" amount={56} icon={MenusSVG} />
-        <AmountCard name="Total orders" amount={56} icon={OrdersSVG} />
-        <AmountCard name="Total users" amount={36} icon={UserSVG} />
+        <AmountCard
+          name="Total products"
+          amount={data.productNum}
+          icon={MenusSVG}
+        />
+        <AmountCard
+          name="Total orders"
+          amount={data.orderNum}
+          icon={OrdersSVG}
+        />
+        <AmountCard name="Total users" amount={data.userNum} icon={UserSVG} />
       </div>
       <div className="grid xl:grid-cols-2 grid-cols-1 xl:gap-4 gap-8 mb-5">
         <CustomerChart />

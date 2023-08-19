@@ -5,9 +5,13 @@ function AmountCard({ name, amount, icon }) {
     <DashboardCard>
       <div className="items-center flex justify-between relative ">
         <div className="">
-          <h2 className="text-black opacity-75 text-2xl font-semibold">
-            {amount}
-          </h2>
+          {amount !== -1 ? (
+            <h2 className="text-black opacity-75 text-2xl font-semibold">
+              {amount}
+            </h2>
+          ) : (
+            <h2 className="text-black text-2xl font-semibold" />
+          )}
           <p className="mb-0 text-black">{name}</p>
         </div>
         {icon}
